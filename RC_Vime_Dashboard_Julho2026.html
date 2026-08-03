@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RC Vime Móveis & Decorações — Dashboard de Performance | Julho 2026</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --coral: #E8614F;
+      --coral-hover: #d14f3e;
+      --coral-light: #fdf1ef;
+      --coral-mid: #f5c6be;
+      --coral-dark: #c44338;
+      --black: #0f0f0f;
+      --gray-900: #1a1a1a;
+      --gray-700: #3d3d3d;
+      --gray-500: #6b6b6b;
+      --gray-300: #c7c7c7;
+      --gray-100: #f5f5f5;
+      --gray-50: #fafafa;
+      --white: #ffffff;
+      --green: #166534;
+      --green-bg: #dcfce7;
+      --blue: #1d4ed8;
+      --blue-bg: #dbeafe;
+      --purple: #6b21a8;
+      --purple-bg: #f3e8ff;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.07);
+      --shadow: 0 2px 12px rgba(0,0,0,0.09);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--gray-100);
+      color: var(--black);
+      line-height: 1.5;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--white);
+      border-bottom: 3px solid var(--coral);
+      padding: 0 40px;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+    }
+
+    .brand-block { display: flex; flex-direction: column; gap: 3px; }
+
+    .brand-agency {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+
+    .brand-name {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .client-block { text-align: right; }
+
+    .client-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: -0.4px;
+    }
+
+    .client-sub {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    .period-badge {
+      display: inline-block;
+      background: var(--coral);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 6px;
+    }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 36px 24px 60px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      margin-top: 36px;
+    }
+
+    .section-header:first-child { margin-top: 0; }
+
+    .section-bar {
+      width: 4px;
+      height: 22px;
+      background: var(--coral);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 22px 18px 18px;
+      box-shadow: var(--shadow-sm);
+      border-top: 3px solid var(--coral-mid);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    .kpi-card.featured {
+      border-top-color: var(--coral);
+      background: var(--coral-light);
+    }
+
+    .kpi-icon { font-size: 24px; line-height: 1; }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .kpi-card.featured .kpi-value { color: var(--coral-dark); }
+
+    .kpi-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+    }
+
+    /* ── CHART ROW ── */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .chart-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 20px;
+    }
+
+    .chart-container { position: relative; }
+
+    /* ── FILTER TABS ── */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 7px 16px;
+      border-radius: 30px;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--coral);
+      color: white;
+      border-color: var(--coral);
+    }
+
+    /* ── TABLE ── */
+    .table-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+    thead th {
+      background: var(--coral);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 13px 14px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    thead th:first-child { padding-left: 20px; }
+    thead th:last-child { text-align: center; }
+
+    tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--coral-light); }
+    tbody tr.completed-row { opacity: .8; }
+
+    tbody td {
+      padding: 12px 14px;
+      color: var(--gray-700);
+      vertical-align: middle;
+    }
+
+    tbody td:first-child { padding-left: 20px; }
+
+    .camp-name { font-weight: 600; color: var(--black); }
+    .camp-code { font-size: 11px; color: var(--gray-500); font-weight: 400; margin-top: 1px; }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 30px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .badge-active { background: var(--green-bg); color: var(--green); }
+    .badge-completed { background: var(--coral-light); color: var(--coral-dark); }
+
+    .badge-obj-eng { background: var(--blue-bg); color: var(--blue); }
+    .badge-obj-sales { background: var(--purple-bg); color: var(--purple); }
+    .badge-obj-leads { background: #fff7ed; color: #c2410c; }
+    .badge-obj-reach { background: #f0fdf4; color: #15803d; }
+    .badge-obj-traffic { background: #f0f9ff; color: #0369a1; }
+
+    .num-right { text-align: right; font-variant-numeric: tabular-nums; }
+    .strong-num { font-weight: 700; color: var(--black); }
+    .cpr-value { font-weight: 600; color: var(--coral-dark); }
+
+    .product-tag {
+      display: inline-block;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .dual-product { background: var(--coral-light); color: var(--coral-dark); font-weight: 600; }
+
+    /* ── ROI SECTION ── */
+    .roi-note {
+      background: var(--coral-light);
+      border-left: 4px solid var(--coral);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--gray-700);
+    }
+
+    .roi-note strong { color: var(--coral-dark); }
+
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .roi-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--coral-mid);
+    }
+
+    .roi-card .product-name {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      margin-bottom: 10px;
+    }
+
+    .roi-card .ticket { font-size: 20px; font-weight: 800; color: var(--black); }
+    .roi-card .conversations { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+    .roi-card .potential { font-size: 14px; font-weight: 700; color: var(--coral-dark); margin-top: 12px; }
+    .roi-card .roi-pct { font-size: 22px; font-weight: 800; color: var(--coral); margin-top: 2px; }
+    .roi-card .roi-label { font-size: 10px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── PROJECTIONS ── */
+    .projection-section {
+      background: var(--gray-900);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      color: white;
+    }
+
+    .projection-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .projection-bar { width: 4px; height: 22px; background: var(--coral); border-radius: 2px; }
+
+    .projection-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: white;
+    }
+
+    .projection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .proj-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(232,97,79,0.25);
+      border-radius: 10px;
+      padding: 22px 20px;
+    }
+
+    .proj-icon { font-size: 26px; margin-bottom: 10px; }
+
+    .proj-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--coral);
+      margin-bottom: 8px;
+    }
+
+    .proj-text {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+    }
+
+    .proj-highlight {
+      display: inline-block;
+      background: rgba(232,97,79,0.15);
+      color: var(--coral);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ── SUMMARY STAT ROW ── */
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stat-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--coral-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .stat-content .stat-val { font-size: 22px; font-weight: 800; color: var(--black); }
+    .stat-content .stat-lbl { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--white);
+      border-top: 2px solid var(--coral-mid);
+      padding: 20px 40px;
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left { font-size: 12px; color: var(--gray-500); }
+    .footer-left strong { color: var(--coral); }
+    .footer-right { font-size: 11px; color: var(--gray-300); text-align: right; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+      .roi-grid { grid-template-columns: repeat(2, 1fr); }
+      .projection-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      .header-inner { flex-direction: column; gap: 14px; text-align: center; }
+      .client-block { text-align: center; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .roi-grid { grid-template-columns: 1fr; }
+      .projection-grid { grid-template-columns: 1fr; }
+      .stat-row { flex-direction: column; }
+      .container { padding: 20px 14px 40px; }
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: white; }
+      .kpi-card:hover { transform: none; }
+    }
+
+    /* ── HIDDEN FILTER ── */
+    .row-hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ HEADER ═══════════════════════════════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <div class="brand-block">
+      <span class="brand-agency">Connect Mídia Digital</span>
+      <span class="brand-name">Estrategista Digital Paula Araujo</span>
+    </div>
+    <div class="client-block">
+      <div class="client-name">RC Vime Móveis &amp; Decorações</div>
+      <div class="client-sub">Dashboard de Performance Meta Ads</div>
+      <span class="period-badge">Julho 2026</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
+<main class="container">
+
+  <!-- KPI CARDS -->
+  <div class="section-header">
+    <div class="section-bar"></div>
+    <span class="section-title">Resultados do Mês</span>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card featured">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-value">R$&nbsp;19.259</div>
+      <div class="kpi-label">Investimento Total</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-value">605 mil</div>
+      <div class="kpi-label">Pessoas Alcançadas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">👁️</div>
+      <div class="kpi-value">1,56 mi</div>
+      <div class="kpi-label">Impressões Totais</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">💬</div>
+      <div class="kpi-value">1.151</div>
+      <div class="kpi-label">Conversas Iniciadas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-value">272</div>
+      <div class="kpi-label">Leads Captados</div>
+    </div>
+  </div>
+
+  <!-- STAT ROW -->
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-icon-wrap">📢</div>
+      <div class="stat-content">
+        <div class="stat-val">17</div>
+        <div class="stat-lbl">Campanhas em Julho</div>
+      </div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-icon-wrap">✅</div>
+      <div class="stat-content">
+        <div class="stat-val">8</div>
+        <div class="stat-lbl">Campanhas Ativas</div>
+      </div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-icon-wrap">📱</div>
+      <div class="stat-content">
+        <div class="stat-val">2.426</div>
+        <div class="stat-lbl">Visitas ao Perfil Instagram</div>
+      </div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-icon-wrap">🎯</div>
+      <div class="stat-content">
+        <div class="stat-val">R$&nbsp;12,31</div>
+        <div class="stat-lbl">CPM Médio da Conta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Investimento por Campanha (R$)</div>
+      <div class="chart-container" style="height: 320px;">
+        <canvas id="investChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Distribuição por Objetivo</div>
+      <div class="chart-container" style="height: 320px;">
+        <canvas id="objChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSATIONS CHART -->
+  <div class="chart-card" style="margin-bottom: 32px;">
+    <div class="chart-title">Conversas Iniciadas por Campanha — WhatsApp &amp; Instagram Direct</div>
+    <div class="chart-container" style="height: 240px;">
+      <canvas id="convChart"></canvas>
+    </div>
+  </div>
+
+  <!-- CAMPAIGN TABLE -->
+  <div class="section-header">
+    <div class="section-bar"></div>
+    <span class="section-title">Performance por Campanha — Julho 2026</span>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterTable('all', this)">Todas (17)</button>
+    <button class="filter-btn" onclick="filterTable('Ativa', this)">Ativas (8)</button>
+    <button class="filter-btn" onclick="filterTable('Pausada', this)">Pausadas (9)</button>
+  </div>
+
+  <div class="table-card">
+    <div class="table-wrapper">
+      <table id="campaignTable">
+        <thead>
+          <tr>
+            <th>Campanha</th>
+            <th>Status</th>
+            <th>Objetivo</th>
+            <th style="text-align:right">Investimento</th>
+            <th style="text-align:right">Impressões</th>
+            <th style="text-align:right">Alcance</th>
+            <th style="text-align:right">Frequência</th>
+            <th style="text-align:right">Custo/Resultado</th>
+            <th style="text-align:right">Resultados</th>
+            <th>Produto Anunciado</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROI SECTION -->
+  <div class="section-header">
+    <div class="section-bar"></div>
+    <span class="section-title">Projeção de ROI Potencial</span>
+  </div>
+
+  <div class="roi-note">
+    <strong>Como funciona esta projeção:</strong> Como o resultado final de vendas ainda está sendo apurado, calculamos o <strong>potencial de receita</strong> com base nas conversas iniciadas e leads captados. Utilizamos uma taxa de conversão conservadora — <strong>1–3%</strong> para campanhas de engajamento (varia por ticket do produto) e <strong>5%</strong> para leads de formulário — aplicada ao ticket de cada produto. Esta é uma estimativa mínima; a performance real pode ser superior.
+  </div>
+
+  <div class="roi-grid" id="roiGrid"></div>
+
+  <!-- ROI TOTAL CARD -->
+  <div style="background: var(--coral); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 32px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 20px;">
+    <div>
+      <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:.75; margin-bottom:6px">Projeção Total Conservadora (1–5% conversão)</div>
+      <div style="font-size:36px; font-weight:800; letter-spacing:-1px;" id="totalPotential">—</div>
+      <div style="font-size:13px; opacity:.8; margin-top:4px">Receita potencial estimada das campanhas de julho</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:.75; margin-bottom:6px">ROI Potencial</div>
+      <div style="font-size:36px; font-weight:800; letter-spacing:-1px;" id="totalROI">—</div>
+      <div style="font-size:13px; opacity:.8; margin-top:4px">vs. R$&nbsp;19.258,57 investido</div>
+    </div>
+  </div>
+
+  <!-- AUGUST PROJECTIONS -->
+  <div class="projection-section">
+    <div class="projection-header">
+      <div class="projection-bar"></div>
+      <span class="projection-title">Estratégia &amp; Projeções para Agosto 2026</span>
+    </div>
+
+    <div class="projection-grid">
+      <div class="proj-card">
+        <div class="proj-icon">🏆</div>
+        <div class="proj-title">Sofá Cumaru Segue Como Destaque</div>
+        <div class="proj-text">
+          A campanha do Sofá Cumaru [0199] fechou julho como a mais eficiente do mês, com <span class="proj-highlight">CPR de R$ 10,13 por conversa</span> e mais de 300 conversas iniciadas. Em agosto, vamos escalar o orçamento dessa campanha mantendo o mesmo público e criativo.
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">🛋️</div>
+        <div class="proj-title">Sofá Barra — Frequência no Limite</div>
+        <div class="proj-text">
+          A campanha Sofá Barra Aberto atingiu <span class="proj-highlight">frequência de 2,57</span>, já próxima da saturação. Recomendamos renovar os criativos em agosto para manter o CPR baixo (hoje em R$ 7,37, o melhor da conta).
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">📋</div>
+        <div class="proj-title">Retomar Lead Formulário</div>
+        <div class="proj-text">
+          A campanha de Leads (Sofá Novo) praticamente não rodou em julho, após ter captado 79 leads em junho. Reativar essa campanha em agosto é uma <span class="proj-highlight">oportunidade direta de voltar a alimentar o time de vendas</span> com contatos qualificados.
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">💎</div>
+        <div class="proj-title">Alto Ticket — Kit + Jogo Bella</div>
+        <div class="proj-text">
+          As campanhas de produto de alto valor (combo Kit + Jogo Bella, ticket R$ 15.990) mantiveram CPR entre R$ 6,64 e R$ 13,32. Em agosto, projetamos <span class="proj-highlight">aumento de investimento nessa linha</span> dado o potencial de receita por conversa.
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">🎬</div>
+        <div class="proj-title">Novo Público — Geolocalização Condomínios</div>
+        <div class="proj-text">
+          As campanhas com segmentação por geolocalização em condomínios e hotéis (lançadas em 21.07) já entregaram bons resultados iniciais. Em agosto, vamos <span class="proj-highlight">expandir esse público</span> para as demais linhas de produto.
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">🎯</div>
+        <div class="proj-title">Meta de Agosto</div>
+        <div class="proj-text">
+          Com o aprendizado de julho (17 campanhas testadas, 8 ativas de forma consistente), projetamos <span class="proj-highlight">redução de 10–15% no CPR médio</span> em agosto ao concentrar orçamento nas campanhas de melhor performance.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════ FOOTER ═══════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      Relatório elaborado por <strong>Connect Mídia Digital</strong> — Estrategista Digital Paula Araujo<br>
+      Dados extraídos via Meta Ads API · Período: Julho 2026
+    </div>
+    <div class="footer-right">
+      Gerado em 03/08/2026<br>
+      RC Vime Móveis &amp; Decorações
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+const campaigns = [
+  { id:1,  name:"Engajamento WhatsApp IA — Giro Rápido 72h",         code:"[2026]",   status:"Pausada", obj:"Engajamento", investment:4259.71, impressions:197666, reach:80020,  freq:2.47, cpr:25.51, metric:"Conversas", results:167,    product:"Giro Rápido — Multiprodutos", ticket:null,  convRate:null },
+  { id:2,  name:"Eng Zap — Sofá Cumaru",                             code:"[0199]",   status:"Ativa",   obj:"Engajamento", investment:3079.28, impressions:113752, reach:51854,  freq:2.19, cpr:10.13, metric:"Conversas", results:304,    product:"Sofá Cumaru",                 ticket:3799,  convRate:0.03 },
+  { id:3,  name:"Engajamento WhatsApp IA — Kit Completo",            code:"[2026]",   status:"Ativa",   obj:"Engajamento", investment:3042.69, impressions:138356, reach:68506,  freq:2.02, cpr:19.26, metric:"Conversas", results:158,    product:"Kit",                         ticket:8990,  convRate:0.03 },
+  { id:4,  name:"Engajamento WhatsApp IA — Jogo Bela",               code:"[2026]",   status:"Pausada", obj:"Engajamento", investment:2019.42, impressions:86509,  reach:44087,  freq:1.96, cpr:29.27, metric:"Conversas", results:69,     product:"Jogo Bella",                  ticket:22990, convRate:0.01 },
+  { id:5,  name:"Eng WhatsApp IA — Jogo Bela + Geoloc. Condomínios",  code:"[2026]",   status:"Ativa",   obj:"Engajamento", investment:1864.08, impressions:102586, reach:54117,  freq:1.90, cpr:19.22, metric:"Conversas", results:97,     product:"Jogo Bella",                  ticket:22990, convRate:0.01 },
+  { id:6,  name:"Eng WhatsApp IA — Sofá Barra + Aberto",             code:"[2026]",   status:"Ativa",   obj:"Engajamento", investment:1510.66, impressions:111747, reach:43538,  freq:2.57, cpr:7.37,  metric:"Conversas", results:205,    product:"Sofá Barra",                  ticket:2999,  convRate:0.03 },
+  { id:7,  name:"Eng WhatsApp IA — Kit Novo + Geoloc. Condomínios",  code:"[2026]",   status:"Ativa",   obj:"Engajamento", investment:1012.93, impressions:73895,  reach:43766,  freq:1.69, cpr:15.35, metric:"Conversas", results:66,     product:"Kit",                         ticket:8990,  convRate:0.03 },
+  { id:8,  name:"Eng WhatsApp IA — Balanço + Aberto",                code:"[2026]",   status:"Pausada", obj:"Engajamento", investment:767.86,  impressions:42825,  reach:25163,  freq:1.70, cpr:15.06, metric:"Conversas", results:51,     product:"Balanço",                     ticket:null,  convRate:null },
+  { id:9,  name:"Tráfego Instagram + Vídeos",                        code:"[2026]",   status:"Ativa",   obj:"Tráfego",     investment:591.28,  impressions:92711,  reach:62668,  freq:1.48, cpr:0.25,  metric:"Visitas Perfil", results:2365, product:"Branding / Tráfego",          ticket:null,  convRate:null },
+  { id:10, name:"Reconhecimento + Vídeo",                            code:"[2026]",   status:"Ativa",   obj:"Reconhecimento", investment:562.52, impressions:572638, reach:315984, freq:1.81, cpr:1.78,  metric:"Alcance",  results:315984, product:"Branding",                    ticket:null,  convRate:null },
+  { id:11, name:"Eng WhatsApp IA — Jogo de Sofá Novo (R$17 mil)",    code:"[2026.2]", status:"Ativa",   obj:"Engajamento", investment:220.82,  impressions:6984,   reach:5143,   freq:1.36, cpr:36.80, metric:"Conversas", results:6,      product:"Jogo de Sofá Novo",           ticket:17000, convRate:0.01 },
+  { id:12, name:"Venda — Produto de Alto Valor (Teste)",             code:"[0192]",   status:"Pausada", obj:"Vendas",      investment:99.56,   impressions:5380,   reach:4660,   freq:1.15, cpr:6.64,  metric:"Conversas", results:15,     product:"Kit + Jogo Bella ★",          ticket:15990, convRate:0.03 },
+  { id:13, name:"Eng Zap — Produtos de Alto Valor + IA",             code:"[193]",    status:"Pausada", obj:"Engajamento", investment:93.24,   impressions:4191,   reach:3307,   freq:1.27, cpr:13.32, metric:"Conversas", results:7,      product:"Kit + Jogo Bella ★",          ticket:15990, convRate:0.03 },
+  { id:14, name:"Lead Formulário — Sofá Novo",                       code:"[0191]",   status:"Pausada", obj:"Leads",       investment:0.64,    impressions:837,    reach:767,    freq:1.09, cpr:0,     metric:"Leads",     results:0,      product:"Sofá Novo",                   ticket:9990,  convRate:0.05 },
+  { id:15, name:"Eng Zap — Sofá Barra + IA",                         code:"[0200]",   status:"Pausada", obj:"Engajamento", investment:42.34,   impressions:2356,   reach:1730,   freq:1.36, cpr:7.06,  metric:"Conversas", results:6,      product:"Sofá Barra",                  ticket:2999,  convRate:0.03 },
+  { id:16, name:"Tráfego + Instagram + Vídeo",                       code:"[0168]",   status:"Pausada", obj:"Tráfego",     investment:16.38,   impressions:1184,   reach:1178,   freq:1.01, cpr:0.27,  metric:"Visitas Perfil", results:61,   product:"Branding / Tráfego",          ticket:null,  convRate:null },
+  { id:17, name:"Reconhecimento + Vídeo — RJ",                       code:"[0193]",   status:"Pausada", obj:"Reconhecimento", investment:11.80, impressions:11021,  reach:10811,  freq:1.02, cpr:1.09,  metric:"Alcance",  results:10811,  product:"Branding",                    ticket:null,  convRate:null },
+];
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+const fmtBRL = (v) => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtN   = (v) => v.toLocaleString('pt-BR');
+const fmtPct = (v) => v.toLocaleString('pt-BR', {maximumFractionDigits:0}) + '%';
+
+function calcROI(c) {
+  if (!c.ticket || !c.results || !c.convRate) return null;
+  const revenue = c.results * c.convRate * c.ticket;
+  const roi = ((revenue - c.investment) / c.investment) * 100;
+  return { revenue, roi };
+}
+
+// ═══════════════════════════════════════════════════════
+//  TABLE
+// ═══════════════════════════════════════════════════════
+const objBadge = {
+  'Engajamento':    '<span class="badge badge-obj-eng">Engajamento</span>',
+  'Vendas':         '<span class="badge badge-obj-sales">Vendas</span>',
+  'Leads':          '<span class="badge badge-obj-leads">Leads</span>',
+  'Reconhecimento': '<span class="badge badge-obj-reach">Reconhecimento</span>',
+  'Tráfego':        '<span class="badge badge-obj-traffic">Tráfego</span>',
+};
+
+function buildTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  campaigns.forEach(c => {
+    const isCompleted = c.status === 'Pausada';
+    const isDual = c.product.includes('★');
+
+    let resultCell = '';
+    if (c.metric === 'Conversas') {
+      resultCell = `<td class="num-right strong-num">${fmtN(c.results)}<br><small style="font-weight:400;color:var(--gray-500)">conversas</small></td>`;
+    } else if (c.metric === 'Leads') {
+      resultCell = `<td class="num-right strong-num">${fmtN(c.results)}<br><small style="font-weight:400;color:var(--gray-500)">leads</small></td>`;
+    } else if (c.metric === 'Visitas Perfil') {
+      resultCell = `<td class="num-right strong-num">${fmtN(c.results)}<br><small style="font-weight:400;color:var(--gray-500)">visitas</small></td>`;
+    } else {
+      resultCell = `<td class="num-right strong-num">${fmtN(c.results)}<br><small style="font-weight:400;color:var(--gray-500)">alcance</small></td>`;
+    }
+
+    let cprDisplay = '';
+    if (c.cpr === 0) cprDisplay = '—';
+    else if (c.metric === 'Conversas') cprDisplay = `${fmtBRL(c.cpr)}/msg`;
+    else if (c.metric === 'Leads') cprDisplay = `${fmtBRL(c.cpr)}/lead`;
+    else if (c.metric === 'Visitas Perfil') cprDisplay = `${fmtBRL(c.cpr)}/visita`;
+    else cprDisplay = `${fmtBRL(c.cpr)}/mil alcance`;
+
+    const productCell = isDual
+      ? `<span class="product-tag dual-product">🔥 ${c.product.replace(' ★','')}</span>`
+      : `<span class="product-tag">${c.product}</span>`;
+
+    const tr = document.createElement('tr');
+    tr.dataset.status = c.status;
+    if (isCompleted) tr.classList.add('completed-row');
+    tr.innerHTML = `
+      <td>
+        <div class="camp-name">${c.name}</div>
+        <div class="camp-code">${c.code}</div>
+      </td>
+      <td><span class="badge ${isCompleted ? 'badge-completed' : 'badge-active'}">${c.status}</span></td>
+      <td>${objBadge[c.obj] || c.obj}</td>
+      <td class="num-right strong-num">${fmtBRL(c.investment)}</td>
+      <td class="num-right">${fmtN(c.impressions)}</td>
+      <td class="num-right">${fmtN(c.reach)}</td>
+      <td class="num-right">${c.freq.toFixed(2).replace('.',',')}</td>
+      <td class="num-right cpr-value">${cprDisplay}</td>
+      ${resultCell}
+      <td>${productCell}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable(status, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#tableBody tr').forEach(row => {
+    if (status === 'all' || row.dataset.status === status) {
+      row.classList.remove('row-hidden');
+    } else {
+      row.classList.add('row-hidden');
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  ROI CARDS
+// ═══════════════════════════════════════════════════════
+function buildROI() {
+  const grid = document.getElementById('roiGrid');
+  grid.innerHTML = '';
+  const roiCampaigns = campaigns.filter(c => c.ticket && c.results && c.convRate);
+  let totalRevenue = 0;
+  let totalInvest = campaigns.reduce((s,c) => s + c.investment, 0);
+
+  roiCampaigns.forEach(c => {
+    const r = calcROI(c);
+    if (!r) return;
+    totalRevenue += r.revenue;
+
+    const pct = c.convRate * 100;
+    const isDual = c.product.includes('★');
+    const note = isDual
+      ? `<div style="font-size:11px;color:var(--gray-500);margin-top:4px">Ticket médio Kit (R$&nbsp;8.990) + Jogo Bella (R$&nbsp;22.990)</div>`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = 'roi-card';
+    card.style.borderLeftColor = c.status === 'Ativa' ? 'var(--coral)' : 'var(--coral-mid)';
+    card.innerHTML = `
+      <div class="product-name">${c.name} <span style="opacity:.6">${c.code}</span></div>
+      <div class="ticket">${fmtBRL(c.ticket)}</div>
+      <div class="conversations">${fmtN(c.results)} ${c.metric.toLowerCase()} iniciados · conversão ${pct}%</div>
+      ${note}
+      <div class="potential">Receita potencial: ${fmtBRL(r.revenue)}</div>
+      <div class="roi-pct">${fmtPct(r.roi)} ROI</div>
+      <div class="roi-label">vs. ${fmtBRL(c.investment)} investido</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const totalROI = ((totalRevenue - totalInvest) / totalInvest) * 100;
+  document.getElementById('totalPotential').textContent = fmtBRL(totalRevenue);
+  document.getElementById('totalROI').textContent = fmtPct(totalROI);
+}
+
+// ═══════════════════════════════════════════════════════
+//  CHARTS
+// ═══════════════════════════════════════════════════════
+const coral = '#E8614F';
+const coralMid = '#F5C6BE';
+const gray700 = '#3d3d3d';
+
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+Chart.defaults.color = '#6b6b6b';
+
+// Investment bar chart
+function buildInvestChart() {
+  const labels = campaigns.map(c => c.name.length > 30 ? c.name.slice(0,30)+'…' : c.name);
+  const data   = campaigns.map(c => c.investment);
+  const colors = campaigns.map(c => c.status === 'Ativa' ? coral : coralMid);
+
+  new Chart(document.getElementById('investChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Investimento (R$)',
+        data,
+        backgroundColor: colors,
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' ' + fmtBRL(ctx.raw),
+            afterLabel: ctx => campaigns[ctx.dataIndex].status === 'Ativa' ? '  ● Ativa' : '  ○ Pausada'
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#f0f0f0' },
+          ticks: {
+            callback: v => 'R$' + (v/1000).toFixed(1) + 'k',
+            font: { size: 11 }
+          }
+        },
+        y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+// Objective donut chart
+function buildObjChart() {
+  const objMap = {};
+  campaigns.forEach(c => {
+    objMap[c.obj] = (objMap[c.obj] || 0) + c.investment;
+  });
+  const labels = Object.keys(objMap);
+  const data   = Object.values(objMap);
+  const palette = ['#E8614F','#F5A39A','#FBBFB4','#F5DDD9','#2563EB','#7C3AED'];
+
+  new Chart(document.getElementById('objChart'), {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: palette.slice(0, labels.length),
+        borderWidth: 0,
+        hoverOffset: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' ' + ctx.label + ': ' + fmtBRL(ctx.raw),
+            afterLabel: ctx => ' ' + ((ctx.raw / campaigns.reduce((s,c)=>s+c.investment,0))*100).toFixed(1) + '% do investimento'
+          }
+        }
+      }
+    }
+  });
+}
+
+// Conversations chart
+function buildConvChart() {
+  const convCamps = campaigns.filter(c => c.metric === 'Conversas');
+  const labels = convCamps.map(c => c.code + ' ' + (c.name.length > 28 ? c.name.slice(0,28)+'…' : c.name));
+  const data   = convCamps.map(c => c.results);
+  const colors = convCamps.map(c => c.status === 'Ativa' ? coral : coralMid);
+
+  new Chart(document.getElementById('convChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Conversas iniciadas',
+        data,
+        backgroundColor: colors,
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' ' + fmtN(ctx.raw) + ' conversas',
+            afterLabel: ctx => ' Produto: ' + convCamps[ctx.dataIndex].product.replace(' ★','')
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 30 } },
+        y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+buildTable();
+buildROI();
+buildInvestChart();
+buildObjChart();
+buildConvChart();
+</script>
+</body>
+</html>
