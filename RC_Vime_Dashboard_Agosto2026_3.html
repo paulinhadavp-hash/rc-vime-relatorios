@@ -1,1402 +1,346 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RC Vime Móveis & Decorações — Dashboard de Performance | Agosto 2026</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --coral: #0d2818;
-      --coral-hover: #143a24;
-      --coral-light: #f7f1e3;
-      --coral-mid: #c9a34e;
-      --coral-dark: #a3812f;
-      --black: #0f0f0f;
-      --gray-900: #1a1a1a;
-      --gray-700: #3d3d3d;
-      --gray-500: #6b6b6b;
-      --gray-300: #c7c7c7;
-      --gray-100: #f5f5f5;
-      --gray-50: #fafafa;
-      --white: #ffffff;
-      --green: #1a1a1a;
-      --green-bg: #f5f5f5;
-      --blue: #3d3d3d;
-      --blue-bg: #f5f5f5;
-      --purple: #a3812f;
-      --purple-bg: #f7f1e3;
-      --amber: #a3812f;
-      --amber-bg: #f7f1e3;
-      --shadow-sm: 0 1px 4px rgba(0,0,0,0.07);
-      --shadow: 0 2px 12px rgba(0,0,0,0.09);
-      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-      --radius: 12px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: var(--gray-100);
-      color: var(--black);
-      line-height: 1.5;
-    }
-
-    .header { background: var(--white); border-bottom: 3px solid var(--coral); padding: 0 40px; }
-    .header-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 24px 0; }
-    .brand-block { display: flex; flex-direction: column; gap: 3px; }
-    .brand-agency { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--coral); }
-    .brand-name { font-size: 13px; color: var(--gray-500); }
-    .client-block { text-align: right; }
-    .client-name { font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -0.4px; }
-    .client-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
-    .period-badge { display: inline-block; background: var(--coral); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-top: 6px; }
-    .live-badge { display: inline-block; background: var(--gray-900); color: var(--coral-mid); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-top: 6px; margin-left: 6px; }
-
-    .container { max-width: 1280px; margin: 0 auto; padding: 36px 24px 60px; }
-
-    .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; margin-top: 36px; }
-    .section-header:first-child { margin-top: 0; }
-    .section-bar { width: 4px; height: 22px; background: var(--coral); border-radius: 2px; flex-shrink: 0; }
-    .section-title { font-size: 16px; font-weight: 700; color: var(--gray-900); text-transform: uppercase; letter-spacing: 0.8px; }
-    .section-note { font-size: 12px; color: var(--gray-500); margin-left: auto; font-weight: 500; }
-
-    .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 32px; }
-    .kpi-card { background: var(--white); border-radius: var(--radius); padding: 22px 18px 18px; box-shadow: var(--shadow-sm); border-top: 3px solid var(--coral-mid); display: flex; flex-direction: column; gap: 8px; transition: transform .15s, box-shadow .15s; }
-    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-    .kpi-card.featured { border-top-color: var(--coral); background: var(--coral-light); }
-    .kpi-icon { font-size: 24px; line-height: 1; }
-    .kpi-value { font-size: 26px; font-weight: 800; color: var(--black); line-height: 1; letter-spacing: -1px; }
-    .kpi-card.featured .kpi-value { color: var(--coral-dark); }
-    .kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-500); }
-
-    .alert-box { background: var(--amber-bg); border-left: 4px solid #a3812f; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 28px; font-size: 13px; color: var(--amber); display: flex; gap: 12px; align-items: flex-start; }
-    .alert-box .alert-icon { font-size: 20px; line-height: 1.3; }
-    .alert-box strong { display: block; margin-bottom: 3px; font-size: 13px; }
-
-    .charts-row { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; margin-bottom: 32px; }
-    .chart-card { background: var(--white); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); }
-    .chart-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-500); margin-bottom: 20px; }
-    .chart-container { position: relative; }
-
-    .filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-btn { padding: 7px 16px; border-radius: 30px; border: 1.5px solid var(--gray-300); background: var(--white); color: var(--gray-700); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
-    .filter-btn:hover, .filter-btn.active { background: var(--coral); color: white; border-color: var(--coral); }
-
-    .table-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 32px; }
-    .table-wrapper { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th { background: var(--coral); color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 13px 14px; text-align: left; white-space: nowrap; }
-    thead th:first-child { padding-left: 20px; }
-    thead th:last-child { text-align: center; }
-    tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--coral-light); }
-    tbody tr.completed-row { opacity: .8; }
-    tbody td { padding: 12px 14px; color: var(--gray-700); vertical-align: middle; }
-    tbody td:first-child { padding-left: 20px; }
-    .camp-name { font-weight: 600; color: var(--black); }
-    .camp-code { font-size: 11px; color: var(--gray-500); font-weight: 400; margin-top: 1px; }
-
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 30px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-    .badge-active { background: var(--green-bg); color: var(--green); }
-    .badge-completed { background: var(--coral-light); color: var(--coral-dark); }
-    .badge-obj-eng { background: var(--blue-bg); color: var(--blue); }
-    .badge-obj-sales { background: var(--purple-bg); color: var(--purple); }
-    .badge-obj-leads { background: #f7f1e3; color: #a3812f; }
-    .badge-obj-reach { background: #f5f5f5; color: #0d2818; }
-    .badge-obj-traffic { background: #f5f5f5; color: #3d3d3d; }
-    .badge-freq-high { background: var(--amber-bg); color: var(--amber); }
-
-    .num-right { text-align: right; font-variant-numeric: tabular-nums; }
-    .strong-num { font-weight: 700; color: var(--black); }
-    .cpr-value { font-weight: 600; color: var(--coral-dark); }
-    .freq-high { font-weight: 700; color: #a3812f; }
-
-    .product-tag { display: inline-block; background: var(--gray-100); color: var(--gray-700); padding: 2px 8px; border-radius: 6px; font-size: 11px; white-space: nowrap; }
-
-    .roi-note { background: var(--coral-light); border-left: 4px solid var(--coral); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: var(--gray-700); }
-    .roi-note strong { color: var(--coral-dark); }
-    .roi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; }
-    .roi-card { background: var(--white); border-radius: var(--radius); padding: 22px 18px; box-shadow: var(--shadow-sm); border-left: 4px solid var(--coral-mid); }
-    .roi-card .product-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); margin-bottom: 10px; }
-    .roi-card .ticket { font-size: 20px; font-weight: 800; color: var(--black); }
-    .roi-card .conversations { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
-    .roi-card .potential { font-size: 14px; font-weight: 700; color: var(--coral-dark); margin-top: 12px; }
-    .roi-card .roi-pct { font-size: 22px; font-weight: 800; color: var(--coral); margin-top: 2px; }
-    .roi-card .roi-label { font-size: 10px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
-
-    .stat-row { display: flex; gap: 16px; margin-bottom: 32px; }
-    .stat-box { flex: 1; background: var(--white); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 14px; }
-    .stat-icon-wrap { width: 44px; height: 44px; border-radius: 10px; background: var(--coral-light); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-    .stat-content .stat-val { font-size: 22px; font-weight: 800; color: var(--black); }
-    .stat-content .stat-lbl { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-
-    /* WEEKLY SECTION */
-    .week-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-    .week-tab { padding: 9px 18px; border-radius: 30px; border: 1.5px solid var(--gray-300); background: var(--white); color: var(--gray-700); font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s; }
-    .week-tab:hover { border-color: var(--coral); }
-    .week-tab.active { background: var(--gray-900); color: #fff; border-color: var(--gray-900); }
-    .week-tab .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--coral); margin-right: 6px; }
-    .week-panel { display: none; }
-    .week-panel.active { display: block; }
-    .week-summary { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
-    .week-chip { background: var(--white); border-radius: 10px; padding: 12px 18px; box-shadow: var(--shadow-sm); flex: 1; min-width: 140px; }
-    .week-chip .chip-val { font-size: 18px; font-weight: 800; color: var(--black); }
-    .week-chip .chip-lbl { font-size: 10px; color: var(--gray-500); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; margin-top: 2px; }
-
-    .footer { background: var(--white); border-top: 2px solid var(--coral-mid); padding: 20px 40px; }
-    .footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .footer-left { font-size: 12px; color: var(--gray-500); }
-    .footer-left strong { color: var(--coral); }
-    .footer-right { font-size: 11px; color: var(--gray-300); text-align: right; }
-
-    @media (max-width: 1024px) {
-      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
-      .charts-row { grid-template-columns: 1fr; }
-      .roi-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 700px) {
-      .header-inner { flex-direction: column; gap: 14px; text-align: center; }
-      .client-block { text-align: center; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .roi-grid { grid-template-columns: 1fr; }
-      .stat-row { flex-direction: column; }
-      .container { padding: 20px 14px 40px; }
-      .week-summary { flex-direction: column; }
-    }
-    .row-hidden { display: none !important; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RC Vime Móveis & Decorações | Relatório de Agosto</title>
+<style>
+  :root{
+    --coral:#E8614F;
+    --coral-dark:#c94a3a;
+    --coral-light:#fbe9e6;
+    --ink:#1a1a1a;
+    --muted:#6b6b6b;
+    --border:#ececec;
+    --green:#1e7a34;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;background:#fff;color:var(--ink);}
+  header{
+    padding:40px 48px 28px;border-bottom:3px solid var(--coral);
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;
+  }
+  .brand{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);font-weight:700;margin-bottom:6px;}
+  h1{margin:0;font-size:28px;font-weight:800;}
+  .subtitle{color:var(--muted);font-size:14px;margin-top:4px;}
+  .period-tag{background:var(--coral);color:#fff;padding:8px 18px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;}
+  main{padding:36px 48px 60px;max-width:1200px;margin:0 auto;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(150px,1fr));gap:16px;margin-bottom:28px;}
+  .kpi-card{border:1px solid var(--border);border-radius:14px;padding:20px 18px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.03);}
+  .kpi-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+  .kpi-value{font-size:24px;font-weight:800;color:var(--ink);}
+  .kpi-value.coral{color:var(--coral);}
+  .kpi-value.green{color:var(--green);}
+  .revenue-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;
+  }
+  .revenue-card{
+    background:linear-gradient(135deg,#fff 0%, var(--coral-light) 100%);
+    border:1px solid var(--coral-light);border-radius:14px;padding:22px 20px;
+  }
+  .revenue-card .kpi-label{color:var(--coral-dark);}
+  .revenue-card .kpi-value{font-size:26px;}
+  section{margin-bottom:44px;}
+  h2{font-size:19px;font-weight:800;margin:0 0 18px;display:flex;align-items:center;gap:10px;}
+  h2::before{content:"";width:6px;height:20px;background:var(--coral);border-radius:3px;}
+  .chart-card{border:1px solid var(--border);border-radius:14px;padding:24px;background:#fff;}
+  .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;padding:12px 14px;background:var(--coral-light);color:var(--coral-dark);font-weight:700;border-bottom:2px solid var(--coral);position:sticky;top:0;}
+  td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--ink);}
+  tr:hover td{background:#fafafa;}
+  .tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap;}
+  .tag.leads{background:#e6f4ea;color:#1e7a34;}
+  .tag.eng{background:#fbe9e6;color:var(--coral-dark);}
+  .tag.awareness{background:#e8eefb;color:#2952a3;}
+  .tag.traffic{background:#fff4e0;color:#a3701a;}
+  .highlight-box{background:var(--coral-light);border-left:4px solid var(--coral);border-radius:10px;padding:20px 24px;font-size:14.5px;line-height:1.6;}
+  .highlight-box b{color:var(--coral-dark);}
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5;}
+  .table-scroll{max-height:520px;overflow-y:auto;overflow-x:auto;}
+  .chart-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:18px;text-align:center;}
+  .bar-chart{display:flex;flex-direction:column;gap:14px;}
+  .bar-row .bar-label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink);margin-bottom:5px;}
+  .bar-row .bar-label b{font-weight:700;}
+  .bar-track{background:#f0f0f0;border-radius:6px;height:14px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;background:var(--coral);}
+  .donut-wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;}
+  .donut{width:150px;height:150px;border-radius:50%;position:relative;flex-shrink:0;}
+  .donut::after{content:"";position:absolute;inset:24px;background:#fff;border-radius:50%;}
+  .donut-legend{display:flex;flex-direction:column;gap:9px;font-size:12.5px;}
+  .donut-legend .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;flex-shrink:0;}
+  .donut-legend li{list-style:none;display:flex;align-items:center;}
+  footer{text-align:center;padding:28px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);}
+  @media (max-width:820px){
+    .grid-2, .revenue-strip{grid-template-columns:1fr;}
+    header{padding:28px 22px;}
+    main{padding:24px 22px 40px;}
+  }
+</style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="brand-block">
-      <span class="brand-agency">Connect Mídia Digital</span>
-      <span class="brand-name">Estrategista Digital Paula Araujo</span>
-    </div>
-    <div class="client-block">
-      <div class="client-name">RC Vime Móveis &amp; Decorações</div>
-      <div class="client-sub">Dashboard de Performance Meta Ads</div>
-      <span class="period-badge">Agosto 2026</span>
-      <span class="live-badge">● Mês em andamento — dados até 24/08</span>
-    </div>
+<header>
+  <div>
+    <div class="brand">Connect Mídia Digital | Estrategista Digital Paula Araujo</div>
+    <h1>RC Vime Móveis & Decorações</h1>
+    <div class="subtitle">Relatório mensal de performance — Meta Ads (Facebook &amp; Instagram)</div>
   </div>
+  <div class="period-tag">01 a 31 de agosto de 2026</div>
 </header>
 
-<main class="container">
+<main>
 
-  <!-- ═══════ RESULTADOS DO MÊS (ACUMULADO ATÉ 24/08) ═══════ -->
-  <div class="section-header">
-    <div class="section-bar"></div>
-    <span class="section-title">Resultados do Mês — Acumulado até 24/08</span>
-  </div>
+  <section>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Investimento</div><div class="kpi-value coral">R$ 19.775,50</div></div>
+      <div class="kpi-card"><div class="kpi-label">Impressões</div><div class="kpi-value">1.554.587</div></div>
+      <div class="kpi-card"><div class="kpi-label">Alcance</div><div class="kpi-value">593.194</div></div>
+      <div class="kpi-card"><div class="kpi-label">Cliques</div><div class="kpi-value">19.366</div></div>
+      <div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">1,25%</div></div>
+      <div class="kpi-card"><div class="kpi-label">CPC médio</div><div class="kpi-value">R$ 1,02</div></div>
+      <div class="kpi-card"><div class="kpi-label">CPM médio</div><div class="kpi-value">R$ 12,72</div></div>
+      <div class="kpi-card"><div class="kpi-label">Frequência</div><div class="kpi-value">2,62</div></div>
+    </div>
 
-  <div class="kpi-grid">
-    <div class="kpi-card featured">
-      <div class="kpi-icon">💰</div>
-      <div class="kpi-value">R$&nbsp;14.494</div>
-      <div class="kpi-label">Investimento Acumulado</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon">👥</div>
-      <div class="kpi-value">232 mil</div>
-      <div class="kpi-label">Pessoas Alcançadas</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon">💬</div>
-      <div class="kpi-value">564</div>
-      <div class="kpi-label">Conversas WhatsApp Iniciadas</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon">📋</div>
-      <div class="kpi-value">287</div>
-      <div class="kpi-label">Leads Captados</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon">📱</div>
-      <div class="kpi-value">1.343</div>
-      <div class="kpi-label">Visitas ao Perfil Instagram</div>
-    </div>
-  </div>
-
-  <div class="alert-box">
-    <div class="alert-icon">🚨</div>
-    <div>
-      <strong>Alerta de fadiga de criativo — Cumaru novo</strong>
-      A campanha <strong>Cumaru novo</strong> segue com frequência alta (3,97 no acumulado do mês; 3,32 mesmo nos últimos 3 dias) — bem acima do limite saudável de ~2,0. Recomendamos revisar o criativo. <em>Observação: o Sofá barra preço novo teve o criativo otimizado em 22/08 (sinalizado no nome da campanha) e já normalizou — frequência de 2,21 no período pós-otimização, fora de alerta.</em>
-    </div>
-  </div>
-
-  <!-- CHARTS ROW -->
-  <div class="charts-row">
-    <div class="chart-card">
-      <div class="chart-title">Investimento por Campanha — Acumulado do Mês (R$)</div>
-      <div class="chart-container" style="height: 340px;">
-        <canvas id="investChart"></canvas>
+    <div class="revenue-strip">
+      <div class="revenue-card">
+        <div class="kpi-label">Vendas de agosto</div>
+        <div class="kpi-value">R$ 675.000,00</div>
+      </div>
+      <div class="revenue-card">
+        <div class="kpi-label">ROAS (retorno sobre investimento)</div>
+        <div class="kpi-value green">34,1x</div>
+      </div>
+      <div class="revenue-card">
+        <div class="kpi-label">Investimento em mídia vs. faturamento</div>
+        <div class="kpi-value">2,9%</div>
       </div>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Distribuição por Objetivo</div>
-      <div class="chart-container" style="height: 340px;">
-        <canvas id="objChart"></canvas>
+
+    <div class="highlight-box">
+      <b>Destaque do mês:</b> 20 campanhas ativas geraram cerca de <b>1.052 oportunidades de contato</b> (312 leads por formulário, 20 leads via Meta Lead Ads e 720 conversas iniciadas no WhatsApp), com investimento de apenas 2,9% do faturamento do mês. Os melhores custos por lead vieram das campanhas "Jogo de sofá novo + público de alto padrão" (R$ 6,94) e "Kit completo" (R$ 13,01 por conversa), boas candidatas a receber mais orçamento em setembro.
+      <div class="note">ROAS calculado sobre o faturamento total informado por Paula para agosto (R$ 675 mil) dividido pelo investimento em mídia — não representa atribuição direta de vendas ao Meta Ads, já que o faturamento inclui outros canais e etapas do funil.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Investimento por objetivo de campanha</h2>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-title">Top 10 campanhas por investimento (R$)</div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label"><span>Jogo Bela + RJ + PI 180D</span><b>R$ 6.062,50</b></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Kit completo</span><b>R$ 3.877,74</b></div><div class="bar-track"><div class="bar-fill" style="width:64%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Cumaru novo + LL 180D</span><b>R$ 1.714,71</b></div><div class="bar-track"><div class="bar-fill" style="width:28.3%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Sofá barra preço novo</span><b>R$ 1.636,51</b></div><div class="bar-track"><div class="bar-fill" style="width:27%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Leads + hotéis e pousada</span><b>R$ 771,87</b></div><div class="bar-track"><div class="bar-fill" style="width:12.7%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Leads + alto padrão</span><b>R$ 736,13</b></div><div class="bar-track"><div class="bar-fill" style="width:12.1%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Jogo de sofá novo 17 mil</span><b>R$ 721,76</b></div><div class="bar-track"><div class="bar-fill" style="width:11.9%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Kit novo + RJ + LL 180D</span><b>R$ 688,84</b></div><div class="bar-track"><div class="bar-fill" style="width:11.4%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Espreguiçadeira</span><b>R$ 610,73</b></div><div class="bar-track"><div class="bar-fill" style="width:10.1%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Chaise com pet</span><b>R$ 506,14</b></div><div class="bar-track"><div class="bar-fill" style="width:8.3%"></div></div></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Investimento por objetivo</div>
+        <div class="donut-wrap">
+          <div class="donut" style="background:conic-gradient(#E8614F 0deg 311.4deg, #f2a49a 311.4deg 343.5deg, #2952a3 343.5deg 351.8deg, #a3701a 351.8deg 360deg);"></div>
+          <ul class="donut-legend">
+            <li><span class="dot" style="background:#E8614F;"></span>Engajamento — 86,5%</li>
+            <li><span class="dot" style="background:#f2a49a;"></span>Leads — 8,9%</li>
+            <li><span class="dot" style="background:#2952a3;"></span>Reconhecimento — 2,3%</li>
+            <li><span class="dot" style="background:#a3701a;"></span>Tráfego — 2,3%</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- CAMPAIGN TABLE -->
-  <div class="section-header">
-    <div class="section-bar"></div>
-    <span class="section-title">Performance por Campanha — Acumulado Agosto 2026</span>
-  </div>
-
-  <div class="filter-row">
-    <button class="filter-btn active" onclick="filterTable('all', this)">Todas (18)</button>
-    <button class="filter-btn" onclick="filterTable('Ativa', this)">Ativas (10)</button>
-    <button class="filter-btn" onclick="filterTable('Pausada', this)">Pausadas / Encerradas (8)</button>
-  </div>
-
-  <div class="table-card">
-    <div class="table-wrapper">
-      <table id="campaignTable">
-        <thead>
-          <tr>
-            <th>Campanha</th>
-            <th>Status</th>
-            <th>Objetivo</th>
-            <th style="text-align:right">Investimento</th>
-            <th style="text-align:right">Impressões</th>
-            <th style="text-align:right">Alcance</th>
-            <th style="text-align:right">Frequência</th>
-            <th style="text-align:right">Custo/Resultado</th>
-            <th style="text-align:right">Resultados</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ═══════ DETALHAMENTO SEMANAL ═══════ -->
-  <div class="section-header">
-    <div class="section-bar"></div>
-    <span class="section-title">Detalhamento Semana a Semana</span>
-    <span class="section-note">Clique em cada semana para ver o resultado do período</span>
-  </div>
-
-  <div class="week-tabs" id="weekTabs"></div>
-
-  <div id="weekPanels"></div>
-
-
-  <!-- ═══════ LEADS QUALIFICADOS — FORMULÁRIOS ═══════ -->
-  <div class="section-header">
-    <div class="section-bar"></div>
-    <span class="section-title">Leads Qualificados — Formulários (13 a 24/08)</span>
-    <span class="section-note">Conteúdo interno — não compartilhar externamente</span>
-  </div>
-
-  <div class="stat-row">
-    <div class="stat-box">
-      <div class="stat-icon-wrap">📋</div>
-      <div class="stat-content"><div class="stat-val">65</div><div class="stat-lbl">Leads · Público Alto Padrão</div></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-icon-wrap">🏨</div>
-      <div class="stat-content"><div class="stat-val">9</div><div class="stat-lbl">Leads · Hotéis e Pousadas</div></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-icon-wrap">💰</div>
-      <div class="stat-content"><div class="stat-val">R$ 2-5 mil</div><div class="stat-lbl">Faixa de orçamento mais comum</div></div>
-    </div>
-  </div>
-
-  <div class="charts-row">
-    <div class="chart-card">
-      <div class="chart-title">Público Alto Padrão — Perfil das Respostas</div>
-      <div class="chart-container" style="height: 300px;">
-        <canvas id="leadsProjChart"></canvas>
+  <section>
+    <h2>Campanhas do mês (01–31/08)</h2>
+    <div class="chart-card" style="padding:0;">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Campanha</th><th>Objetivo</th><th>Investimento</th><th>Impressões</th><th>Cliques</th><th>CTR</th><th>Resultado</th><th>Custo/Resultado</th></tr>
+          </thead>
+          <tbody id="campaignTableBody"></tbody>
+        </table>
       </div>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Hotéis e Pousadas — Perfil das Respostas</div>
-      <div class="chart-container" style="height: 300px;">
-        <canvas id="leadsHotelChart"></canvas>
+    <div class="note">Lista com as 20 campanhas que tiveram investimento no período (ativas e finalizadas). Dados via API do Meta Ads, atualizados até 14/08 — mês em andamento.</div>
+  </section>
+
+  <section>
+    <h2>Perfil dos leads &amp; estratégias acertivas</h2>
+
+    <div class="kpi-grid" style="margin-bottom:24px;">
+      <div class="kpi-card"><div class="kpi-label">Leads qualificados no mês</div><div class="kpi-value coral">120</div></div>
+      <div class="kpi-card"><div class="kpi-label">Menor custo por lead da conta</div><div class="kpi-value green">R$ 6,94</div></div>
+      <div class="kpi-card"><div class="kpi-label">Leads "comprando agora"</div><div class="kpi-value">6</div></div>
+      <div class="kpi-card"><div class="kpi-label">Donos/sócios entre os leads B2B</div><div class="kpi-value">50%</div></div>
+      <div class="kpi-card"><div class="kpi-label">Pipeline potencial autodeclarado</div><div class="kpi-value green">R$ 551 mil</div></div>
+    </div>
+
+    <div class="highlight-box" style="margin-bottom:24px;">
+      <b>Por que essas duas campanhas de leads performaram tão bem:</b> as perguntas qualificadoras no formulário (orçamento, ambiente, função, urgência) filtraram automaticamente quem tem intenção real de compra — o público de "Alto Padrão" trouxe o menor custo por lead de toda a conta (R$ 6,94) e 93% desses leads já se autodeclaram com orçamento entre R$ 2 mil e R$ 10 mil, alinhado ao ticket da RC Vime. Já a campanha de Hotéis e Pousadas rodou 100% no Instagram e trouxe 50% de leads que são donos/sócios — ou seja, falando direto com quem decide a compra.
+      <div class="note">Pipeline potencial calculado pela faixa de orçamento autodeclarada no formulário (ponto médio de cada faixa) — não é valor fechado de venda, é intenção de compra.</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-title">Alto Padrão — orçamento autodeclarado (n=98)</div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label"><span>R$ 2 a 5 mil</span><b>64</b></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>R$ 5 a 10 mil</span><b>27</b></div><div class="bar-track"><div class="bar-fill" style="width:42.2%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>R$ 10 a 20 mil</span><b>5</b></div><div class="bar-track"><div class="bar-fill" style="width:7.8%"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Acima de R$ 20 mil</span><b>2</b></div><div class="bar-track"><div class="bar-fill" style="width:3.1%"></div></div></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Alto Padrão — ambiente do projeto (n=98)</div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label"><span>Varanda</span><b>47</b></div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#f2a49a;"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Área gourmet</span><b>29</b></div><div class="bar-track"><div class="bar-fill" style="width:61.7%;background:#f2a49a;"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Jardim</span><b>14</b></div><div class="bar-track"><div class="bar-fill" style="width:29.8%;background:#f2a49a;"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Outros</span><b>8</b></div><div class="bar-track"><div class="bar-fill" style="width:17%;background:#f2a49a;"></div></div></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="section-header" style="margin-top:24px;">
-    <div class="section-bar"></div>
-    <span class="section-title">Contatos — Público Alto Padrão (65)</span>
-  </div>
-  <div class="table-card">
-    <div class="table-wrapper" style="max-height:420px; overflow-y:auto;">
-      <table>
-        <thead>
-          <tr><th>Data</th><th>Nome</th><th>WhatsApp</th><th>Ambiente</th><th>Móvel</th><th>Orçamento</th><th>Plataforma</th></tr>
-        </thead>
-        <tbody id="projLeadsBody"></tbody>
-      </table>
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="chart-card">
+        <div class="chart-title">Hotéis/Pousadas — urgência de compra (n=22)</div>
+        <div class="donut-wrap">
+          <div class="donut" style="background:conic-gradient(#1e7a34 0deg 98.2deg, #E8614F 98.2deg 147.3deg, #d8d8d8 147.3deg 360deg);"></div>
+          <ul class="donut-legend">
+            <li><span class="dot" style="background:#1e7a34;"></span>Comprando agora — 6 (27%)</li>
+            <li><span class="dot" style="background:#E8614F;"></span>Próximos 3 meses — 3 (14%)</li>
+            <li><span class="dot" style="background:#d8d8d8;"></span>Ainda pesquisando — 13 (59%)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Hotéis/Pousadas — segmento (n=22)</div>
+        <div class="donut-wrap">
+          <div class="donut" style="background:conic-gradient(#E8614F 0deg 81.8deg, #2952a3 81.8deg 114.5deg, #a3701a 114.5deg 163.6deg, #d8d8d8 163.6deg 360deg);"></div>
+          <ul class="donut-legend">
+            <li><span class="dot" style="background:#E8614F;"></span>Pousada — 5 (23%)</li>
+            <li><span class="dot" style="background:#2952a3;"></span>Hotel/resort — 2 (9%)</li>
+            <li><span class="dot" style="background:#a3701a;"></span>Restaurante/bar/clube — 3 (14%)</li>
+            <li><span class="dot" style="background:#d8d8d8;"></span>Outro — 12 (55%)</li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
+    <div class="note">Base: 98 leads da campanha "Leads + Jogo de Sofá Novo + Público de Alto Padrão" (13–31/08) e 22 leads da campanha "Leads + Hotéis e Pousada" (17/08–01/09), coletados via formulário nativo do Meta (Instant Forms). Gráficos em CSS puro — sem dependência de biblioteca externa, para abrir em qualquer navegador.</div>
+  </section>
 
-  <div class="section-header" style="margin-top:24px;">
-    <div class="section-bar"></div>
-    <span class="section-title">Contatos — Hotéis e Pousadas (9)</span>
-  </div>
-  <div class="table-card">
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr><th>Data</th><th>Nome</th><th>WhatsApp</th><th>Segmento</th><th>Função</th><th>Previsão</th><th>Plataforma</th></tr>
-        </thead>
-        <tbody id="hotelLeadsBody"></tbody>
-      </table>
+  <section>
+    <h2>Planilha — Leads Projeto Alto Padrão (98)</h2>
+    <div class="chart-card" style="padding:0;">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Nome</th><th>Contato</th><th>Ambiente</th><th>Móvel de interesse</th><th>Orçamento</th></tr>
+          </thead>
+          <tbody id="leadsProjetoBody"></tbody>
+        </table>
+      </div>
     </div>
-  </div>
+    <div class="note">Lista completa dos 98 leads recebidos pela campanha "Leads + Jogo de Sofá Novo + Público de Alto Padrão" entre 13 e 31/08, via formulário do Meta.</div>
+  </section>
+
+  <section>
+    <h2>Planilha — Leads Hotéis e Pousadas (22)</h2>
+    <div class="chart-card" style="padding:0;">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Nome</th><th>Contato</th><th>Segmento</th><th>Função</th><th>Previsão de compra</th></tr>
+          </thead>
+          <tbody id="leadsHotelBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="note">Lista completa dos 22 leads recebidos pela campanha "Leads + Hotéis e Pousada" entre 17/08 e 01/09, via formulário do Meta.</div>
+  </section>
 
 </main>
 
-
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-left">
-      Relatório elaborado por <strong>Connect Mídia Digital</strong> — Estrategista Digital Paula Araujo<br>
-      Dados extraídos via Meta Ads API · Período: Agosto 2026 (parcial — atualizado semanalmente)
-    </div>
-    <div class="footer-right">
-      Gerado em 24/08/2026<br>
-      RC Vime Móveis &amp; Decorações
-    </div>
-  </div>
+<footer>
+  Connect Mídia Digital · Estrategista Digital Paula Araujo · Relatório gerado a partir dos dados da API do Meta Ads
 </footer>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  DATA — MONTHLY ACCUMULATED (01-24/08)
-// ═══════════════════════════════════════════════════════
 const campaigns = [
-  { name:"Eng WhatsApp IA — Jogo Bela + Geoloc. Condomínios",       code:"[2026]",    status:"Ativa",   obj:"Engajamento", investment:4494.50, impressions:165681, reach:75771, freq:2.19, cpr:20.34, metric:"Conversas", results:221 },
-  { name:"Engajamento WhatsApp IA — Kit Completo",                   code:"[2026]",    status:"Ativa",   obj:"Engajamento", investment:2667.44, impressions:107648, reach:47153, freq:2.28, cpr:13.40, metric:"Conversas", results:199 },
-  { name:"Eng WhatsApp IA — Sofá Barra Preço Novo (otimizada 22/08)", code:"[2026.08]", status:"Ativa",   obj:"Engajamento", investment:1128.64, impressions:104161, reach:29584, freq:3.52, cpr:13.60, metric:"Leads",     results:83, highFreq:false },
-  { name:"Eng WhatsApp IA — Cumaru Novo",                            code:"[2026.8]",  status:"Ativa",   obj:"Engajamento", investment:1061.18, impressions:65100,  reach:16387, freq:3.97, cpr:14.95, metric:"Leads",     results:71, highFreq:true },
-  { name:"Eng WhatsApp IA — Kit Novo + Geoloc. Condomínios",         code:"[2026]",    status:"Ativa",   obj:"Engajamento", investment:688.84,  impressions:33873,  reach:21983, freq:1.54, cpr:14.06, metric:"Conversas", results:49 },
-  { name:"Leads — Jogo de Sofá Novo + Público Alto Padrão",          code:"[2026.8]",  status:"Ativa",   obj:"Leads",       investment:429.90,  impressions:17267,  reach:9208,  freq:1.88, cpr:5.97,  metric:"Leads",     results:72 },
-  { name:"Tráfego Instagram + Vídeos",                                code:"[2026]",    status:"Ativa",   obj:"Tráfego",     investment:338.25,  impressions:21687,  reach:14498, freq:1.50, cpr:0.25,  metric:"Visitas Perfil", results:1343 },
-  { name:"Reconhecimento + Vídeo",                                    code:"[2026]",    status:"Ativa",   obj:"Reconhecimento", investment:336.68, impressions:366879, reach:232833, freq:1.58, cpr:1.45, metric:"Alcance", results:232833 },
-  { name:"Leads — Hotéis e Pousadas (Jogo de Sofá + Espreguiçadeira)",code:"[2026.8]",  status:"Ativa",   obj:"Leads",       investment:403.61,  impressions:4382,   reach:2636,  freq:1.66, cpr:44.85, metric:"Leads",     results:9 },
-  { name:"Engajamento IA — Jogo Hotel",                               code:"[2028.08]", status:"Ativa",   obj:"Engajamento", investment:110.35,  impressions:12302,  reach:5944,  freq:2.07, cpr:0,     metric:"Leads",     results:0 },
-  { name:"Eng WhatsApp IA — Jogo de Sofá Novo 17 Mil",               code:"[2026.2]",  status:"Pausada", obj:"Engajamento", investment:721.76,  impressions:20822,  reach:13240, freq:1.57, cpr:26.73, metric:"Conversas", results:27 },
-  { name:"Eng WhatsApp IA — Espreguiçadeira",                         code:"[2026.08]", status:"Pausada", obj:"Engajamento", investment:610.73,  impressions:165491, reach:71495, freq:2.31, cpr:0.26,  metric:"Cliques",   results:2365 },
-  { name:"Eng WhatsApp IA — Chaise com Pet",                          code:"[2026.8]",  status:"Pausada", obj:"Engajamento", investment:506.14,  impressions:30666,  reach:10951, freq:2.80, cpr:16.33, metric:"Leads",     results:31 },
-  { name:"Eng Zap — Sofá Cumaru [0199]",                              code:"[0199]",    status:"Pausada", obj:"Engajamento", investment:413.80,  impressions:15521,  reach:10004, freq:1.55, cpr:8.62,  metric:"Conversas", results:48 },
-  { name:"Eng WhatsApp IA — Oferta Desconto",                         code:"[2026.8]",  status:"Pausada", obj:"Engajamento", investment:253.31,  impressions:18346,  reach:7247,  freq:2.53, cpr:13.33, metric:"Leads",     results:19 },
-  { name:"Eng WhatsApp IA — Capa (Institucional)",                    code:"[2026.8]",  status:"Pausada", obj:"Engajamento", investment:135.27,  impressions:11425,  reach:6116,  freq:1.87, cpr:0,     metric:"Leads",     results:0 },
-  { name:"Eng WhatsApp IA — Sofá Barra + Aberto",                     code:"[2026]",    status:"Pausada", obj:"Engajamento", investment:130.42,  impressions:9377,   reach:7220,  freq:1.30, cpr:6.52,  metric:"Conversas", results:20 },
-  { name:"Eng WhatsApp IA — Jogo de Sofá Novo + Alto Padrão",        code:"[2026.8]",  status:"Pausada", obj:"Engajamento", investment:62.72,   impressions:4279,   reach:2479,  freq:1.73, cpr:31.36, metric:"Leads",     results:2 },
+  {name:"Jogo Bela + RJ + PI 180D", tag:"eng", tagLabel:"Engajamento", spend:6062.50, impressions:225078, clicks:3412, ctr:"1,52%", result:"278 conversas", cpr:"R$ 21,81"},
+  {name:"Kit completo", tag:"eng", tagLabel:"Engajamento", spend:3877.74, impressions:160718, clicks:2398, ctr:"1,49%", result:"298 conversas", cpr:"R$ 13,01"},
+  {name:"Cumaru novo + LL 180D", tag:"eng", tagLabel:"Engajamento", spend:1714.71, impressions:90372, clicks:1490, ctr:"1,65%", result:"71 leads", cpr:"R$ 24,15"},
+  {name:"Sofá barra preço novo", tag:"eng", tagLabel:"Engajamento", spend:1636.51, impressions:152645, clicks:2323, ctr:"1,52%", result:"83 leads", cpr:"R$ 19,72"},
+  {name:"Leads + hotéis e pousada", tag:"leads", tagLabel:"Leads", spend:771.87, impressions:8976, clicks:314, ctr:"3,50%", result:"20 leads (Meta)", cpr:"R$ 38,59"},
+  {name:"Leads + jogo de sofá + público alto padrão", tag:"leads", tagLabel:"Leads", spend:736.13, impressions:31474, clicks:1070, ctr:"3,40%", result:"106 leads", cpr:"R$ 6,94"},
+  {name:"Jogo de sofá novo 17 mil + LL 180D", tag:"eng", tagLabel:"Engajamento", spend:721.76, impressions:20822, clicks:297, ctr:"1,43%", result:"27 conversas", cpr:"R$ 26,73"},
+  {name:"Kit novo + RJ + LL 180D", tag:"eng", tagLabel:"Engajamento", spend:688.84, impressions:33873, clicks:432, ctr:"1,28%", result:"49 conversas", cpr:"R$ 14,06"},
+  {name:"Espreguiçadeira", tag:"eng", tagLabel:"Engajamento", spend:610.73, impressions:165491, clicks:2895, ctr:"1,75%", result:"2.365 cliques no link", cpr:"R$ 0,26"},
+  {name:"Chaise com pet", tag:"eng", tagLabel:"Engajamento", spend:506.14, impressions:30666, clicks:513, ctr:"1,67%", result:"31 leads", cpr:"R$ 16,33"},
+  {name:"Reconhecimento + vídeo", tag:"awareness", tagLabel:"Reconhecimento", spend:456.05, impressions:497652, clicks:823, ctr:"0,17%", result:"293.429 alcance", cpr:"R$ 1,55"},
+  {name:"Tráfego Instagram + Vídeos", tag:"traffic", tagLabel:"Tráfego", spend:451.82, impressions:28229, clicks:1590, ctr:"5,63%", result:"1.804 visitas ao perfil", cpr:"R$ 0,25"},
+  {name:"Eng Zap + Sofá Cumaru", tag:"eng", tagLabel:"Engajamento", spend:413.80, impressions:15521, clicks:335, ctr:"2,16%", result:"48 conversas", cpr:"R$ 8,62"},
+  {name:"Oferta desconto + LL 180D", tag:"leads", tagLabel:"Leads", spend:253.31, impressions:18346, clicks:295, ctr:"1,61%", result:"19 leads", cpr:"R$ 13,33"},
+  {name:"Engajamento WhatsApp + área externa", tag:"eng", tagLabel:"Engajamento", spend:221.39, impressions:20299, clicks:313, ctr:"1,54%", result:"—", cpr:"—"},
+  {name:"Engajamento IA + jogo hotel", tag:"eng", tagLabel:"Engajamento", spend:320.13, impressions:28950, clicks:423, ctr:"1,46%", result:"—", cpr:"—"},
+  {name:"Sofá Barra + Aberto", tag:"eng", tagLabel:"Engajamento", spend:130.42, impressions:9377, clicks:195, ctr:"2,08%", result:"20 conversas", cpr:"R$ 6,52"},
+  {name:"Capa + RJ", tag:"eng", tagLabel:"Engajamento", spend:135.27, impressions:11425, clicks:170, ctr:"1,49%", result:"—", cpr:"—"},
+  {name:"Jogo de sofá novo + público alto padrão (eng.)", tag:"eng", tagLabel:"Engajamento", spend:62.72, impressions:4279, clicks:74, ctr:"1,73%", result:"2 leads", cpr:"R$ 31,36"},
+  {name:"Mensagem + Dubai", tag:"eng", tagLabel:"Engajamento", spend:3.66, impressions:394, clicks:4, ctr:"1,02%", result:"—", cpr:"—"},
 ];
 
-// ═══════════════════════════════════════════════════════
-//  DATA — WEEKLY BREAKDOWN
-// ═══════════════════════════════════════════════════════
-const weeks = [
-  {
-    label: "Semana 1 · 03–07/08",
-    totalInvest: 2036.58, totalResults: "152 conversas / 0 leads",
-    rows: [
-      { name:"Jogo Bela",        code:"[2026]", invest:880.40, results:51, metric:"conversas", cpr:17.26 },
-      { name:"Kit Completo",     code:"[2026]", invest:470.60, results:35, metric:"conversas", cpr:13.45 },
-      { name:"Kit Novo",         code:"[2026]", invest:445.91, results:34, metric:"conversas", cpr:13.12 },
-      { name:"Jogo Sofá Novo 17 Mil", code:"[2026.2]", invest:461.27, results:13, metric:"conversas", cpr:35.48 },
-      { name:"Reconhecimento",   code:"[2026]", invest:62.45,  results:null, metric:"reach", cpr:null },
-      { name:"Tráfego Instagram",code:"[2026]", invest:66.51,  results:245, metric:"visitas", cpr:0.27 },
-    ]
-  },
-  {
-    label: "Semana 2 · 10–14/08",
-    totalInvest: 2350.85, totalResults: "93 conversas/leads",
-    rows: [
-      { name:"Jogo Bela",             code:"[2026]",   invest:1045.06, results:59, metric:"conversas", cpr:17.71 },
-      { name:"Kit Completo",          code:"[2026]",   invest:498.73,  results:34, metric:"conversas", cpr:14.67 },
-      { name:"Sofá Barra Preço Novo", code:"[2026.08]",invest:256.88,  results:28, metric:"leads", cpr:9.17, highFreq:true, freq:3.20 },
-      { name:"Cumaru Novo",           code:"[2026.8]", invest:254.59,  results:19, metric:"leads", cpr:13.40, highFreq:true, freq:3.54 },
-      { name:"Espreguiçadeira",       code:"[2026.08]",invest:228.81,  results:1081, metric:"cliques", cpr:0.21 },
-      { name:"Chaise com Pet",        code:"[2026.8]", invest:157.82,  results:11, metric:"leads", cpr:14.35 },
-      { name:"Oferta Desconto",       code:"[2026.8]", invest:115.00,  results:11, metric:"leads", cpr:10.45 },
-      { name:"Jogo Sofá Novo Alto Padrão (Eng.)", code:"[2026.8]", invest:62.72, results:2, metric:"leads", cpr:31.36 },
-      { name:"Jogo Sofá Novo (Leads)",code:"[2026.8]", invest:67.05,   results:15, metric:"leads", cpr:4.47 },
-      { name:"Reconhecimento",        code:"[2026]",   invest:73.90,   results:null, metric:"reach", cpr:null },
-      { name:"Tráfego Instagram",     code:"[2026]",   invest:73.59,   results:364, metric:"visitas", cpr:0.20 },
-    ]
-  },
-  {
-    label: "Semana 3 · 17–21/08",
-    totalInvest: 2831.44, totalResults: "170 conversas/leads",
-    rows: [
-      { name:"Jogo Bela",             code:"[2026]",   invest:966.44, results:41, metric:"conversas", cpr:23.57 },
-      { name:"Kit Completo",          code:"[2026]",   invest:779.45, results:57, metric:"conversas", cpr:13.67 },
-      { name:"Sofá Barra Preço Novo", code:"[2026.08]",invest:245.33, results:25, metric:"leads", cpr:9.81, highFreq:true, freq:2.93 },
-      { name:"Jogo Sofá Novo (Leads)",code:"[2026.8]", invest:198.58, results:31, metric:"leads", cpr:6.41 },
-      { name:"Leads Hotéis e Pousadas",code:"[2026.8]",invest:232.12, results:3,  metric:"leads", cpr:77.37 },
-      { name:"Cumaru Novo",           code:"[2026.8]", invest:224.98, results:13, metric:"leads", cpr:17.31, highFreq:true, freq:2.82 },
-      { name:"Jogo Hotel (novo)",     code:"[2028.08]",invest:43.53,  results:0,  metric:"leads", cpr:0 },
-      { name:"Reconhecimento",        code:"[2026]",   invest:71.58,  results:null, metric:"reach", cpr:null },
-      { name:"Tráfego Instagram",     code:"[2026]",   invest:73.39,  results:254, metric:"visitas", cpr:0.29 },
-    ]
-  },
-  {
-    label: "Semana 4 · 22–24/08 (em andamento)",
-    totalInvest: null, totalResults: "Em apuração",
-    inProgress: true,
-    rows: []
-  },
-];
+const tbody = document.getElementById('campaignTableBody');
+campaigns.forEach(c => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${c.name}</td>
+    <td><span class="tag ${c.tag}">${c.tagLabel}</span></td>
+    <td>R$ ${c.spend.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td>
+    <td>${c.impressions.toLocaleString('pt-BR')}</td>
+    <td>${c.clicks.toLocaleString('pt-BR')}</td>
+    <td>${c.ctr}</td>
+    <td>${c.result}</td>
+    <td>${c.cpr}</td>
+  `;
+  tbody.appendChild(tr);
+});
 
-// ═══════════════════════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════════════════════
-const fmtBRL = (v) => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtN   = (v) => v.toLocaleString('pt-BR');
+// ---- Planilhas integradas (dados reais dos leads) ----
+const leadsProjeto = [{"data": "31/08 15:56", "nome": "Jorge Pereira da Silva", "contato": "(21) 99015-0150", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "31/08 11:54", "nome": "Sonia Regina Antunes Antunes", "contato": "(21) 98646-0010", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "31/08 10:55", "nome": "Sandra Mariano", "contato": "(21) 97277-2250", "ambiente": "Área goumert", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "31/08 00:45", "nome": "maria", "contato": "(24) 99913-0672", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "30/08 21:35", "nome": "Fatima Bragança", "contato": "(21) 99986-8203", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "30/08 18:01", "nome": "Lenise Cury", "contato": "(21) 99322-2238", "ambiente": "Área goumert", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "30/08 15:38", "nome": "Regina Fabregas", "contato": "(21) 99764-4417", "ambiente": "Jardim", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "30/08 11:43", "nome": "Tania Cristina Cardoso", "contato": "(21) 97214-8338", "ambiente": "Varanda", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "30/08 09:36", "nome": "Marina Junior", "contato": "(21) 97017-0982", "ambiente": "Outros", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "30/08 09:21", "nome": "Lucia Barcellos", "contato": "(21) 99836-4772", "ambiente": "Área goumert", "movel": "Outro móveis", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "29/08 23:47", "nome": "Rose Paz", "contato": "(21) 98628-3611", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "29/08 21:36", "nome": "Bruno Nunes", "contato": "(21) 97517-1112", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "29/08 21:25", "nome": "Roberta Abbud Azevedo Correia", "contato": "(24) 99226-6776", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "29/08 14:37", "nome": "Flavia Abrahim Lima", "contato": "(22) 98122-5924", "ambiente": "Área goumert", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "29/08 13:54", "nome": "Maria Amelia Paninho Pereira", "contato": "(21) 98050-8700", "ambiente": "Outros", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "29/08 11:39", "nome": "Ana Paula Brianti Robusti", "contato": "(21) 99522-0568", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "28/08 18:47", "nome": "Adilson Silva", "contato": "(21) 99632-6854", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 10.000 a 20.000 mil reais"}, {"data": "28/08 14:25", "nome": "Maria Nascimento", "contato": "(22) 99701-3309", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "28/08 10:57", "nome": "Eliane Kronemberger", "contato": "(24) 98138-4442", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "28/08 05:34", "nome": "Ivone Barros", "contato": "(21) 97975-6330", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "28/08 00:43", "nome": "Marcia Cordeiro", "contato": "(21) 98842-7422", "ambiente": "Jardim", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "27/08 10:41", "nome": "Ana Maria de Souza", "contato": "(21) 99840-4747", "ambiente": "Jardim", "movel": "Balanço", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "27/08 07:06", "nome": "Sandra Elena", "contato": "(24) 99249-5487", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "26/08 15:29", "nome": "Marco Bullé", "contato": "(24) 99991-2535", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "26/08 14:35", "nome": "Marcia Tostes", "contato": "(21) 99676-7736", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "26/08 12:51", "nome": "João Carlos  Gaspar", "contato": "(21) 96457-4827", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "26/08 00:20", "nome": "Ana Paula Abrantes Dau", "contato": "(21) 98819-0392", "ambiente": "Varanda", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "25/08 21:49", "nome": "Therezinha Maria Batista", "contato": "(21) 99584-8838", "ambiente": "Varanda", "movel": "Outro móveis", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "25/08 19:18", "nome": "Hermileda Barbosa", "contato": "(67) 99983-2535", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "25/08 18:36", "nome": "Jussara Acruche Braga", "contato": "(22) 99717-5315", "ambiente": "Jardim", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "25/08 14:55", "nome": "Cristina Souza", "contato": "(24) 99264-4610", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "25/08 12:09", "nome": "Rita Rocha", "contato": "(24) 99996-0314", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "24/08 22:10", "nome": "Márcia Souza", "contato": "(21) 98144-3454", "ambiente": "Varanda", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "24/08 12:37", "nome": "pascoal laviola ambrabi", "contato": "(21) 96451-1505", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "24/08 09:51", "nome": "Vanúbia Amaral", "contato": "(24) 99943-6671", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "23/08 20:39", "nome": "Dora Santiago", "contato": "(21) 96608-7000", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "23/08 17:50", "nome": "Julci Caiado", "contato": "(21) 99728-2298", "ambiente": "Varanda", "movel": "Outro móveis", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "23/08 17:05", "nome": "Vanessa Rosas", "contato": "(21) 98159-9181", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "23/08 16:35", "nome": "Raimundo ambrosio de Souza", "contato": "(33) 98417-8524", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "23/08 11:59", "nome": "Iraildes Jibe", "contato": "(21) 99646-5484", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "23/08 08:36", "nome": "Ana Souza", "contato": "(21) 99571-6764", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "22/08 22:09", "nome": "Alberto Trotte", "contato": "(21) 98923-4146", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "22/08 17:01", "nome": "Hilton Ferreira da Silva", "contato": "(21) 98366-6667", "ambiente": "Jardim", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "22/08 15:41", "nome": "Marcinha Alves", "contato": "(21) 96462-6944", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "22/08 15:05", "nome": "Marilia Tebet Azevedo Aredes", "contato": "(21) 98111-3893", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "22/08 14:34", "nome": "Adriana Borges Bittencourt", "contato": "(22) 99253-7853", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 10.000 a 20.000 mil reais"}, {"data": "22/08 02:07", "nome": "Eny Corsi", "contato": "(21) 99311-5548", "ambiente": "Outros", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "21/08 16:46", "nome": "Cirlei Regina Bastos Rodrigues", "contato": "(21) 99381-2482", "ambiente": "Varanda", "movel": "Balanço", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "21/08 15:47", "nome": "Roselene Ferreira", "contato": "(21) 98751-4412", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "21/08 15:43", "nome": "Maria Jose Assuncao Silva", "contato": "(21) 99642-8329", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "21/08 12:33", "nome": "Margareth Araujo", "contato": "(21) 99443-2113", "ambiente": "Varanda", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "21/08 08:14", "nome": "Sandra Rezende", "contato": "(22) 98180-5500", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "21/08 07:21", "nome": "Lucíola Costa", "contato": "(21) 99994-6946", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "21/08 00:01", "nome": "Vivian de Melo Orça", "contato": "(21) 97611-0788", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "20/08 21:35", "nome": "Alda Do Amaral Gabriel", "contato": "(21) 99606-0249", "ambiente": "Área goumert", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "20/08 20:57", "nome": "Claudia Dantas", "contato": "(21) 99112-6736", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "20/08 20:54", "nome": "Jackson Jesus", "contato": "(21) 99850-6438", "ambiente": "Outros", "movel": "Kit completo", "orcamento": "Acima de 20.000 mil reais"}, {"data": "20/08 18:10", "nome": "Maria Vitória Lago", "contato": "(21) 97137-6096", "ambiente": "Área goumert", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "20/08 15:41", "nome": "Regina Salema Garcao Ribeiro", "contato": "(21) 99943-2571", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "20/08 13:53", "nome": "Marcia Matarazzo", "contato": "(21) 98212-7707", "ambiente": "Varanda", "movel": "Outro móveis", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "20/08 12:21", "nome": "Rosangela Valladares", "contato": "(21) 96406-7193", "ambiente": "Varanda", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "20/08 10:37", "nome": "Ana Maria Veltri", "contato": "(21) 98837-1302", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "20/08 09:21", "nome": "Ana Giba Giba Rib", "contato": "(21) 98884-5894", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "19/08 16:56", "nome": "Laudinei Passos", "contato": "(21) 97012-7233", "ambiente": "Área goumert", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "19/08 15:10", "nome": "Karen Wellausen", "contato": "(21) 99383-9299", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "18/08 21:07", "nome": "Alice Mariz Tambasco", "contato": "(21) 99615-5202", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "18/08 21:00", "nome": "Mara Mendes", "contato": "(21) 99986-4197", "ambiente": "Outros", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "18/08 16:20", "nome": "Júlio Nascimento", "contato": "(22) 99725-1225", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "18/08 13:17", "nome": "Daniel Leite", "contato": "(24) 99981-1461", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 10.000 a 20.000 mil reais"}, {"data": "18/08 08:53", "nome": "Angela Maria Oliveira Cappe", "contato": "(22) 99911-9070", "ambiente": "Varanda", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "18/08 08:49", "nome": "Marluce SantAnna de Miranda", "contato": "(21) 99631-0383", "ambiente": "Jardim", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "18/08 05:50", "nome": "Rose Cristina", "contato": "(21) 99872-9911", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "18/08 03:31", "nome": "Simone Coutinho", "contato": "(41) 76478-5926", "ambiente": "Varanda", "movel": "Espreguiçadeiras", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "18/08 00:16", "nome": "Adriana Auad", "contato": "(21) 99762-3427", "ambiente": "Jardim", "movel": "Kit completo", "orcamento": "De 10.000 a 20.000 mil reais"}, {"data": "17/08 12:28", "nome": "Soraia", "contato": "(22) 99898-0983", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "17/08 08:45", "nome": "Leila Nogueira", "contato": "(21) 99665-6961", "ambiente": "Varanda", "movel": "Jogo de mesa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "17/08 00:54", "nome": "Daniela Cunha", "contato": "(21) 98222-1991", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "16/08 16:50", "nome": "Renata Orofino", "contato": "(21) 98484-2101", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "16/08 16:36", "nome": "Rita Diniz", "contato": "(21) 98252-3102", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "16/08 14:54", "nome": "Fabio Silva", "contato": "(21) 99982-5809", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 10.000 a 20.000 mil reais"}, {"data": "16/08 14:30", "nome": "Eliana Massari", "contato": "(21) 98272-7003", "ambiente": "Varanda", "movel": "Outro móveis", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "16/08 08:53", "nome": "Rejane Gualter", "contato": "(21) 99978-5730", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "16/08 08:30", "nome": "Marcia Lins", "contato": "(21) 97991-3461", "ambiente": "Área goumert", "movel": "Jogo de mesa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "15/08 15:10", "nome": "Nasare Ribeiro", "contato": "(22) 99619-6062", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "15/08 14:29", "nome": "Dra. Michele Rocha/Fisioterapeuta", "contato": "(24) 98125-9914", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "15/08 08:14", "nome": "Cleuma Balbi", "contato": "(21) 99998-8853", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "14/08 18:41", "nome": "Paulo Paixao", "contato": "(21) 96921-9131", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "14/08 18:00", "nome": "Marilange Abreu", "contato": "(21) 98438-2412", "ambiente": "Varanda", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "14/08 13:32", "nome": "Rosa Maria", "contato": "(21) 99975-7969", "ambiente": "Outros", "movel": "Kit completo", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "14/08 10:46", "nome": "Isabel Carvalho", "contato": "(21) 99994-8055", "ambiente": "Área goumert", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "14/08 10:24", "nome": "Randy Silva", "contato": "(21) 97034-7024", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "14/08 09:12", "nome": "Renata Casella", "contato": "(21) 99118-6003", "ambiente": "Outros", "movel": "Kit completo", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "14/08 02:54", "nome": "Carlos Parada", "contato": "(24) 98819-1007", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "14/08 01:12", "nome": "SantoAnjo Bernardo", "contato": "(21) 99891-8179", "ambiente": "Outros", "movel": "Outro móveis", "orcamento": "De 2.000 a 5.000 mil reais"}, {"data": "14/08 00:42", "nome": "Michael", "contato": "(21) 99828-6808", "ambiente": "Área goumert", "movel": "Kit completo", "orcamento": "Acima de 20.000 mil reais"}, {"data": "14/08 00:33", "nome": "Paula Araujo - Estrategista Digital e especialista em IA.", "contato": "(21) 98440-8370", "ambiente": "Área goumert", "movel": "Balanço", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "13/08 23:03", "nome": "Cristina Kelly Rangel", "contato": "(22) 99215-4494", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 5.000 a 10.000 mil reais"}, {"data": "13/08 20:57", "nome": "Cristina Bacelo", "contato": "(21) 99604-8715", "ambiente": "Varanda", "movel": "Jogo de sofá para área externa", "orcamento": "De 2.000 a 5.000 mil reais"}];
 
-// ═══════════════════════════════════════════════════════
-//  MONTHLY TABLE
-// ═══════════════════════════════════════════════════════
-const objBadge = {
-  'Engajamento':    '<span class="badge badge-obj-eng">Engajamento</span>',
-  'Leads':          '<span class="badge badge-obj-leads">Leads</span>',
-  'Reconhecimento': '<span class="badge badge-obj-reach">Reconhecimento</span>',
-  'Tráfego':        '<span class="badge badge-obj-traffic">Tráfego</span>',
-};
+const leadsHotel = [{"data": "01/09 16:46", "nome": "Leo Godoi", "contato": "(21) 96978-5309", "segmento": "Outro", "funcao": "Outro", "previsao": "Ainda pesquisando"}, {"data": "01/09 04:23", "nome": "Michel Abitbol", "contato": "(21) 99374-7320", "segmento": "Pousada", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}, {"data": "31/08 23:52", "nome": "Pimentel", "contato": "(21) 96496-9999", "segmento": "Restaurante/bar/clube", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}, {"data": "31/08 07:50", "nome": "Viviane  Oliveira", "contato": "(21) 97256-6738", "segmento": "Outro", "funcao": "Outro", "previsao": "Próximos 3 meses"}, {"data": "29/08 13:24", "nome": "Débora Lima", "contato": "(22) 98112-4711", "segmento": "Outro", "funcao": "Proprietário/sócio", "previsao": "Comprando agora"}, {"data": "29/08 13:20", "nome": "Marcia carneiro de Vasconcelos alves", "contato": "(21) 98820-7778", "segmento": "Pousada", "funcao": "Proprietário/sócio", "previsao": "Comprando agora"}, {"data": "26/08 22:27", "nome": "Gabrielle Amorim", "contato": "(21) 99497-0079", "segmento": "Outro", "funcao": "Outro", "previsao": "Ainda pesquisando"}, {"data": "26/08 11:03", "nome": "Walkiria Moura", "contato": "(21) 98833-3501", "segmento": "Outro", "funcao": "Outro", "previsao": "Comprando agora"}, {"data": "26/08 08:57", "nome": "Douglas Dias", "contato": "(21) 97751-7482", "segmento": "Hotel/resort", "funcao": "Compras/suprimentos", "previsao": "Próximos 3 meses"}, {"data": "26/08 07:57", "nome": "Karine Carvalho", "contato": "(22) 99884-2416", "segmento": "Outro", "funcao": "Proprietário/sócio", "previsao": "Comprando agora"}, {"data": "25/08 16:32", "nome": "Michelle Matos", "contato": "(21) 97031-4565", "segmento": "Outro", "funcao": "Outro", "previsao": "Comprando agora"}, {"data": "25/08 16:18", "nome": "Marilena De Jesus Dias", "contato": "(21) 99908-5957", "segmento": "Outro", "funcao": "Outro", "previsao": "Ainda pesquisando"}, {"data": "24/08 22:58", "nome": "Academia FAS Trainer | Resende", "contato": "(24) 99224-9892", "segmento": "Restaurante/bar/clube", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}, {"data": "23/08 17:06", "nome": "Claudia Modesto Santoyo", "contato": "(21) 99888-8818", "segmento": "Outro", "funcao": "Outro", "previsao": "Ainda pesquisando"}, {"data": "23/08 15:19", "nome": "Radamés Muniz", "contato": "(22) 99962-1860", "segmento": "Pousada", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}, {"data": "23/08 10:53", "nome": "Helio G. Pellegrino", "contato": "(21) 99986-5645", "segmento": "Pousada", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}, {"data": "23/08 10:19", "nome": "Anapaula Debossan", "contato": "(21) 98265-7142", "segmento": "Outro", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}, {"data": "22/08 10:10", "nome": "Ana Maura | Movimente-se", "contato": "(22) 99937-2799", "segmento": "Hotel/resort", "funcao": "Proprietário/sócio", "previsao": "Próximos 3 meses"}, {"data": "22/08 02:45", "nome": "Lucia Gama", "contato": "(21) 99976-2479", "segmento": "Outro", "funcao": "Outro", "previsao": "Ainda pesquisando"}, {"data": "19/08 07:50", "nome": "Ana Claudia Fonseca", "contato": "(21) 98365-2019", "segmento": "Outro", "funcao": "Gerente/diretor", "previsao": "Comprando agora"}, {"data": "18/08 08:10", "nome": "Luiz Homem de Carvalho", "contato": "(21) 99572-5595", "segmento": "Restaurante/bar/clube", "funcao": "Gerente/diretor", "previsao": "Ainda pesquisando"}, {"data": "17/08 10:49", "nome": "Sergio Granja", "contato": "(21) 99787-6181", "segmento": "Pousada", "funcao": "Proprietário/sócio", "previsao": "Ainda pesquisando"}];
 
-function buildTable() {
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '';
-  campaigns.forEach(c => {
-    const isCompleted = c.status === 'Pausada';
+function urgTag(p) {
+  if (p === 'Comprando agora') return '<span class="tag leads">Comprando agora</span>';
+  if (p === 'Próximos 3 meses') return '<span class="tag eng">Próximos 3 meses</span>';
+  return p;
+}
 
-    let resultCell = '';
-    const metricLabel = { 'Conversas':'conversas', 'Leads':'leads', 'Visitas Perfil':'visitas', 'Cliques':'cliques', 'Alcance':'alcance' }[c.metric] || '';
-    resultCell = `<td class="num-right strong-num">${fmtN(c.results)}<br><small style="font-weight:400;color:var(--gray-500)">${metricLabel}</small></td>`;
-
-    let cprDisplay = '';
-    if (!c.cpr) cprDisplay = '—';
-    else cprDisplay = `${fmtBRL(c.cpr)}/${metricLabel === 'conversas' ? 'msg' : metricLabel === 'leads' ? 'lead' : metricLabel === 'cliques' ? 'clique' : 'visita'}`;
-
-    const freqCell = c.highFreq
-      ? `<span class="freq-high">${c.freq.toFixed(2).replace('.',',')} ⚠️</span>`
-      : c.freq.toFixed(2).replace('.',',');
-
+try {
+  const pBody = document.getElementById('leadsProjetoBody');
+  leadsProjeto.forEach(l => {
     const tr = document.createElement('tr');
-    tr.dataset.status = c.status;
-    if (isCompleted) tr.classList.add('completed-row');
-    tr.innerHTML = `
-      <td>
-        <div class="camp-name">${c.name}</div>
-        <div class="camp-code">${c.code}</div>
-      </td>
-      <td><span class="badge ${isCompleted ? 'badge-completed' : 'badge-active'}">${c.status}</span></td>
-      <td>${objBadge[c.obj] || c.obj}</td>
-      <td class="num-right strong-num">${fmtBRL(c.investment)}</td>
-      <td class="num-right">${fmtN(c.impressions)}</td>
-      <td class="num-right">${fmtN(c.reach)}</td>
-      <td class="num-right">${freqCell}</td>
-      <td class="num-right cpr-value">${cprDisplay}</td>
-      ${resultCell}
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function filterTable(status, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('#tableBody tr').forEach(row => {
-    if (status === 'all' || row.dataset.status === status) {
-      row.classList.remove('row-hidden');
-    } else {
-      row.classList.add('row-hidden');
-    }
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-//  CHARTS
-// ═══════════════════════════════════════════════════════
-const coral = '#0d2818';
-const coralMid = '#c9a34e';
-
-Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-Chart.defaults.color = '#6b6b6b';
-
-function buildInvestChart() {
-  const labels = campaigns.map(c => c.name.length > 34 ? c.name.slice(0,34)+'…' : c.name);
-  const data   = campaigns.map(c => c.investment);
-  const colors = campaigns.map(c => c.status === 'Ativa' ? coral : coralMid);
-
-  new Chart(document.getElementById('investChart'), {
-    type: 'bar',
-    data: { labels, datasets: [{ label: 'Investimento (R$)', data, backgroundColor: colors, borderRadius: 5, borderSkipped: false }] },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw), afterLabel: ctx => campaigns[ctx.dataIndex].status === 'Ativa' ? '  ● Ativa' : '  ○ Pausada' } }
-      },
-      scales: {
-        x: { grid: { color: '#f0f0f0' }, ticks: { callback: v => 'R$' + (v/1000).toFixed(1) + 'k', font: { size: 11 } } },
-        y: { grid: { display: false }, ticks: { font: { size: 9.5 } } }
-      }
-    }
-  });
-}
-
-function buildObjChart() {
-  const objMap = {};
-  campaigns.forEach(c => { objMap[c.obj] = (objMap[c.obj] || 0) + c.investment; });
-  const labels = Object.keys(objMap);
-  const data   = Object.values(objMap);
-  const palette = ['#0d2818','#c9a34e','#3d3d3d','#a3812f','#6b6b6b','#1a1a1a'];
-
-  new Chart(document.getElementById('objChart'), {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: palette.slice(0, labels.length), borderWidth: 0, hoverOffset: 6 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '62%',
-      plugins: {
-        legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } },
-        tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + fmtBRL(ctx.raw), afterLabel: ctx => ' ' + ((ctx.raw / campaigns.reduce((s,c)=>s+c.investment,0))*100).toFixed(1) + '% do investimento' } }
-      }
-    }
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-//  WEEKLY PANELS
-// ═══════════════════════════════════════════════════════
-function buildWeeks() {
-  const tabsEl = document.getElementById('weekTabs');
-  const panelsEl = document.getElementById('weekPanels');
-  tabsEl.innerHTML = '';
-  panelsEl.innerHTML = '';
-
-  weeks.forEach((w, i) => {
-    const tab = document.createElement('button');
-    tab.className = 'week-tab' + (i === 0 ? ' active' : '');
-    tab.innerHTML = `<span class="dot"></span>${w.label}`;
-    tab.onclick = () => selectWeek(i);
-    tabsEl.appendChild(tab);
-
-    const panel = document.createElement('div');
-    panel.className = 'week-panel' + (i === 0 ? ' active' : '');
-    panel.id = 'week-panel-' + i;
-
-    if (w.inProgress) {
-      panel.innerHTML = `
-        <div class="week-summary">
-          <div class="week-chip"><div class="chip-val">Em apuração</div><div class="chip-lbl">Esta semana ainda está rodando</div></div>
-        </div>
-        <div class="table-card"><div style="padding:28px;color:var(--gray-500);font-size:13px;">Os dados desta semana serão consolidados ao final do período e adicionados aqui.</div></div>
-      `;
-      panelsEl.appendChild(panel);
-      return;
-    }
-
-    let rowsHtml = '';
-    w.rows.forEach(r => {
-      const metricLbl = { conversas:'conversas', leads:'leads', visitas:'visitas', cliques:'cliques', reach:'alcance' }[r.metric] || '';
-      const resultDisplay = r.results === null ? '—' : fmtN(r.results) + ' ' + metricLbl;
-      const cprDisplay = (!r.cpr) ? '—' : fmtBRL(r.cpr) + (r.metric === 'conversas' ? '/msg' : r.metric === 'leads' ? '/lead' : r.metric === 'cliques' ? '/clique' : '/visita');
-      const freqDisplay = r.highFreq ? `<span class="freq-high">${r.freq.toFixed(2).replace('.',',')} ⚠️</span>` : '—';
-      rowsHtml += `
-        <tr>
-          <td><div class="camp-name">${r.name}</div><div class="camp-code">${r.code}</div></td>
-          <td class="num-right strong-num">${fmtBRL(r.invest)}</td>
-          <td class="num-right">${freqDisplay}</td>
-          <td class="num-right cpr-value">${cprDisplay}</td>
-          <td class="num-right strong-num">${resultDisplay}</td>
-        </tr>`;
-    });
-
-    panel.innerHTML = `
-      <div class="week-summary">
-        <div class="week-chip"><div class="chip-val">${fmtBRL(w.totalInvest)}</div><div class="chip-lbl">Investido na semana</div></div>
-        <div class="week-chip"><div class="chip-val">${w.totalResults}</div><div class="chip-lbl">Resultados no período</div></div>
-      </div>
-      <div class="table-card">
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Campanha</th>
-                <th style="text-align:right">Investimento</th>
-                <th style="text-align:right">Frequência</th>
-                <th style="text-align:right">Custo/Resultado</th>
-                <th style="text-align:right">Resultados</th>
-              </tr>
-            </thead>
-            <tbody>${rowsHtml}</tbody>
-          </table>
-        </div>
-      </div>
-    `;
-    panelsEl.appendChild(panel);
-  });
-}
-
-function selectWeek(i) {
-  document.querySelectorAll('.week-tab').forEach((t, idx) => t.classList.toggle('active', idx === i));
-  document.querySelectorAll('.week-panel').forEach((p, idx) => p.classList.toggle('active', idx === i));
-}
-
-// ═══════════════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════════════
-buildTable();
-buildInvestChart();
-buildObjChart();
-buildWeeks();
-
-// ═══════════════════════════════════════════════════════
-//  DATA — LEAD FORM SUBMISSIONS (13-24/08)
-// ═══════════════════════════════════════════════════════
-const projLeads = [
-  {
-    "data": "24/08 12:37",
-    "nome": "pascoal laviola ambrabi",
-    "tel": "+5521964511505",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "24/08 09:51",
-    "nome": "Vanúbia Amaral",
-    "tel": "+5524999436671",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "23/08 20:39",
-    "nome": "Dora Santiago",
-    "tel": "+5521966087000",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "23/08 17:50",
-    "nome": "Julci Caiado",
-    "tel": "+5521997282298",
-    "ambiente": "varanda",
-    "movel": "outro móveis",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "23/08 17:05",
-    "nome": "Vanessa Rosas",
-    "tel": "+5521981599181",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "23/08 16:35",
-    "nome": "Raimundo ambrosio de Souza",
-    "tel": "+5533984178524",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "23/08 11:59",
-    "nome": "Iraildes Jibe",
-    "tel": "+5521996465484",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "23/08 08:36",
-    "nome": "Ana Souza",
-    "tel": "+5521995716764",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "22/08 22:09",
-    "nome": "Alberto Trotte",
-    "tel": "+5521989234146",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "22/08 17:01",
-    "nome": "Hilton Ferreira da Silva",
-    "tel": "+5521983666667",
-    "ambiente": "jardim",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "22/08 15:41",
-    "nome": "Marcinha Alves",
-    "tel": "+5521964626944",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "22/08 15:05",
-    "nome": "Marilia Tebet Azevedo Aredes",
-    "tel": "+5521981113893",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "22/08 14:34",
-    "nome": "Adriana Borges Bittencourt",
-    "tel": "+5522992537853",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 10.000 a 20.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "22/08 02:07",
-    "nome": "Eny Corsi",
-    "tel": "+5521993115548",
-    "ambiente": "outros",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "21/08 16:46",
-    "nome": "Cirlei Regina Bastos Rodrigues",
-    "tel": "+5521993812482",
-    "ambiente": "varanda",
-    "movel": "balanço",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "21/08 15:47",
-    "nome": "Roselene Ferreira",
-    "tel": "+5521987514412",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "21/08 15:43",
-    "nome": "Maria Jose Assuncao Silva",
-    "tel": "+5521996428329",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "21/08 12:33",
-    "nome": "Margareth Araujo",
-    "tel": "+5521994432113",
-    "ambiente": "varanda",
-    "movel": "espreguiçadeiras",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "21/08 08:14",
-    "nome": "Sandra Rezende",
-    "tel": "+5522981805500",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "21/08 07:21",
-    "nome": "Lucíola Costa",
-    "tel": "+5521999946946",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "21/08 00:01",
-    "nome": "Vivian de Melo Orça",
-    "tel": "+5521976110788",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 21:35",
-    "nome": "Alda Do Amaral Gabriel",
-    "tel": "+5521996060249",
-    "ambiente": "área goumert",
-    "movel": "jogo de mesa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 20:57",
-    "nome": "Claudia Dantas",
-    "tel": "+5521991126736",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 20:54",
-    "nome": "Jackson Jesus",
-    "tel": "+5521998506438",
-    "ambiente": "outros",
-    "movel": "kit completo",
-    "orcamento": "acima de 20.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "20/08 18:10",
-    "nome": "Maria Vitória Lago",
-    "tel": "+5521971376096",
-    "ambiente": "área goumert",
-    "movel": "espreguiçadeiras",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 15:41",
-    "nome": "Regina Salema Garcao Ribeiro",
-    "tel": "+5521999432571",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 13:53",
-    "nome": "Marcia Matarazzo",
-    "tel": "+5521982127707",
-    "ambiente": "varanda",
-    "movel": "outro móveis",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 12:21",
-    "nome": "Rosangela Valladares",
-    "tel": "+5521964067193",
-    "ambiente": "varanda",
-    "movel": "espreguiçadeiras",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 10:37",
-    "nome": "Ana Maria Veltri",
-    "tel": "+5521988371302",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "20/08 09:21",
-    "nome": "Ana Giba Giba Rib",
-    "tel": "+5521988845894",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "19/08 16:56",
-    "nome": "Laudinei Passos",
-    "tel": "+5521970127233",
-    "ambiente": "área goumert",
-    "movel": "jogo de mesa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "19/08 15:10",
-    "nome": "Karen Wellausen",
-    "tel": "+5521993839299",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 21:07",
-    "nome": "Alice Mariz Tambasco",
-    "tel": "+5521996155202",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 21:00",
-    "nome": "Mara Mendes",
-    "tel": "+5521999864197",
-    "ambiente": "outros",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 16:20",
-    "nome": "Júlio Nascimento",
-    "tel": "+5522997251225",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 13:17",
-    "nome": "Daniel Leite",
-    "tel": "+5524999811461",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "de 10.000 a 20.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "18/08 08:53",
-    "nome": "Angela Maria Oliveira Cappe",
-    "tel": "+5522999119070",
-    "ambiente": "varanda",
-    "movel": "jogo de mesa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 08:49",
-    "nome": "Marluce SantAnna de Miranda",
-    "tel": "+5521996310383",
-    "ambiente": "jardim",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "18/08 05:50",
-    "nome": "Rose Cristina",
-    "tel": "+5521998729911",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 03:31",
-    "nome": "Simone Coutinho",
-    "tel": "+41764785926",
-    "ambiente": "varanda",
-    "movel": "espreguiçadeiras",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "18/08 00:16",
-    "nome": "Adriana Auad",
-    "tel": "+5521997623427",
-    "ambiente": "jardim",
-    "movel": "kit completo",
-    "orcamento": "de 10.000 a 20.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "17/08 12:28",
-    "nome": "Soraia",
-    "tel": "+5522998980983",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "17/08 08:45",
-    "nome": "Leila Nogueira",
-    "tel": "+5521996656961",
-    "ambiente": "varanda",
-    "movel": "jogo de mesa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "17/08 00:54",
-    "nome": "Daniela Cunha",
-    "tel": "+5521982221991",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "16/08 16:50",
-    "nome": "Renata Orofino",
-    "tel": "+5521984842101",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "16/08 16:36",
-    "nome": "Rita Diniz",
-    "tel": "+5521982523102",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "16/08 14:54",
-    "nome": "Fabio Silva",
-    "tel": "+5521999825809",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 10.000 a 20.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "16/08 14:30",
-    "nome": "Eliana Massari",
-    "tel": "+5521982727003",
-    "ambiente": "varanda",
-    "movel": "outro móveis",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "16/08 08:53",
-    "nome": "Rejane Gualter",
-    "tel": "+5521999785730",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "16/08 08:30",
-    "nome": "Marcia Lins",
-    "tel": "+5521979913461",
-    "ambiente": "área goumert",
-    "movel": "jogo de mesa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "15/08 15:10",
-    "nome": "Nasare Ribeiro",
-    "tel": "+5522996196062",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "15/08 14:29",
-    "nome": "Dra. Michele Rocha/Fisioterapeuta",
-    "tel": "+5524981259914",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "15/08 08:14",
-    "nome": "Cleuma Balbi",
-    "tel": "+5521999988853",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 18:41",
-    "nome": "Paulo Paixao",
-    "tel": "+5521969219131",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "14/08 18:00",
-    "nome": "Marilange Abreu",
-    "tel": "+5521984382412",
-    "ambiente": "varanda",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 13:32",
-    "nome": "Rosa Maria",
-    "tel": "+5521999757969",
-    "ambiente": "outros",
-    "movel": "kit completo",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 10:46",
-    "nome": "Isabel Carvalho",
-    "tel": "+5521999948055",
-    "ambiente": "área goumert",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 10:24",
-    "nome": "Randy Silva",
-    "tel": "+5521970347024",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 09:12",
-    "nome": "Renata Casella",
-    "tel": "+5521991186003",
-    "ambiente": "outros",
-    "movel": "kit completo",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "14/08 02:54",
-    "nome": "Carlos Parada",
-    "tel": "+5524988191007",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 01:12",
-    "nome": "SantoAnjo Bernardo",
-    "tel": "+5521998918179",
-    "ambiente": "outros",
-    "movel": "outro móveis",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "14/08 00:42",
-    "nome": "Michael",
-    "tel": "+5521998286808",
-    "ambiente": "área goumert",
-    "movel": "kit completo",
-    "orcamento": "acima de 20.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "14/08 00:33",
-    "nome": "Paula Araujo - Estrategista Digital e especialista em IA.",
-    "tel": "+5521984408370",
-    "ambiente": "área goumert",
-    "movel": "balanço",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "IG"
-  },
-  {
-    "data": "13/08 23:03",
-    "nome": "Cristina Kelly Rangel",
-    "tel": "+5522992154494",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 5.000 a 10.000 mil reais",
-    "plataforma": "FB"
-  },
-  {
-    "data": "13/08 20:57",
-    "nome": "Cristina Bacelo",
-    "tel": "+5521996048715",
-    "ambiente": "varanda",
-    "movel": "jogo de sofá para área externa",
-    "orcamento": "de 2.000 a 5.000 mil reais",
-    "plataforma": "IG"
-  }
-];
-const hotelLeads = [
-  {
-    "data": "23/08 17:06",
-    "nome": "Claudia Modesto Santoyo",
-    "tel": "+5521998888818",
-    "segmento": "outro",
-    "funcao": "outro",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  },
-  {
-    "data": "23/08 15:19",
-    "nome": "Radamés Muniz",
-    "tel": "22999621860",
-    "segmento": "pousada",
-    "funcao": "proprietário / sócio",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  },
-  {
-    "data": "23/08 10:53",
-    "nome": "Helio G. Pellegrino",
-    "tel": "+5521999865645",
-    "segmento": "pousada",
-    "funcao": "proprietário / sócio",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  },
-  {
-    "data": "23/08 10:19",
-    "nome": "Anapaula Debossan",
-    "tel": "+5521982657142",
-    "segmento": "outro",
-    "funcao": "proprietário / sócio",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  },
-  {
-    "data": "22/08 10:10",
-    "nome": "Ana Maura | Movimente-se",
-    "tel": "+5522999372799",
-    "segmento": "hotel / resort",
-    "funcao": "proprietário / sócio",
-    "previsao": "próximos 3 meses",
-    "plataforma": "IG"
-  },
-  {
-    "data": "22/08 02:45",
-    "nome": "Lucia Gama",
-    "tel": "+5521999762479",
-    "segmento": "outro",
-    "funcao": "outro",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  },
-  {
-    "data": "19/08 07:50",
-    "nome": "Ana Claudia Fonseca",
-    "tel": "+5521983652019",
-    "segmento": "outro",
-    "funcao": "gerente / diretor",
-    "previsao": "comprando agora",
-    "plataforma": "IG"
-  },
-  {
-    "data": "18/08 08:10",
-    "nome": "Luiz Homem de Carvalho",
-    "tel": "+5521995725595",
-    "segmento": "restaurante / bar / clube",
-    "funcao": "gerente / diretor",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  },
-  {
-    "data": "17/08 10:49",
-    "nome": "Sergio Granja",
-    "tel": "+5521997876181",
-    "segmento": "pousada",
-    "funcao": "proprietário / sócio",
-    "previsao": "ainda pesquisando",
-    "plataforma": "IG"
-  }
-];
-
-function buildLeadTables() {
-  const pBody = document.getElementById('projLeadsBody');
-  pBody.innerHTML = projLeads.map(l => `
-    <tr>
-      <td>${l.data}</td>
-      <td class="camp-name">${l.nome}</td>
-      <td>${l.tel}</td>
-      <td>${l.ambiente}</td>
-      <td>${l.movel}</td>
-      <td>${l.orcamento}</td>
-      <td><span class="badge badge-obj-traffic">${l.plataforma}</span></td>
-    </tr>`).join('');
-
-  const hBody = document.getElementById('hotelLeadsBody');
-  hBody.innerHTML = hotelLeads.map(l => `
-    <tr>
-      <td>${l.data}</td>
-      <td class="camp-name">${l.nome}</td>
-      <td>${l.tel}</td>
-      <td>${l.segmento}</td>
-      <td>${l.funcao}</td>
-      <td>${l.previsao}</td>
-      <td><span class="badge badge-obj-traffic">${l.plataforma}</span></td>
-    </tr>`).join('');
-}
-
-function countBy(arr, key) {
-  const m = {};
-  arr.forEach(x => { m[x[key]] = (m[x[key]]||0)+1; });
-  return m;
-}
-
-function buildLeadCharts() {
-  const orcMap = countBy(projLeads, 'orcamento');
-  new Chart(document.getElementById('leadsProjChart'), {
-    type: 'bar',
-    data: {
-      labels: Object.keys(orcMap),
-      datasets: [{ label: 'Leads por orçamento', data: Object.values(orcMap), backgroundColor: '#0d2818', borderRadius: 5 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { ticks: { font: { size: 10 } } } }
-    }
+    tr.innerHTML = `<td>${l.data}</td><td>${l.nome}</td><td>${l.contato}</td><td>${l.ambiente}</td><td>${l.movel}</td><td>${l.orcamento}</td>`;
+    pBody.appendChild(tr);
   });
 
-  const previsaoMap = countBy(hotelLeads, 'previsao');
-  new Chart(document.getElementById('leadsHotelChart'), {
-    type: 'doughnut',
-    data: {
-      labels: Object.keys(previsaoMap),
-      datasets: [{ data: Object.values(previsaoMap), backgroundColor: ['#0d2818','#c9a34e','#3d3d3d','#a3812f'], borderWidth: 0 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '58%',
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
-    }
+  const hBody = document.getElementById('leadsHotelBody');
+  leadsHotel.forEach(l => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${l.data}</td><td>${l.nome}</td><td>${l.contato}</td><td>${l.segmento}</td><td>${l.funcao}</td><td>${urgTag(l.previsao)}</td>`;
+    hBody.appendChild(tr);
   });
+} catch (err) {
+  console.error('Falha ao montar tabelas de leads', err);
 }
-
-buildLeadTables();
-buildLeadCharts();
-
 </script>
+
 </body>
 </html>
