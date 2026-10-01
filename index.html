@@ -1,122 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RC Vime Móveis & Decorações — Relatórios de Performance | Connect Mídia Digital</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RC Casa e Jardim • Central de Performance | Connect Mídia Digital</title>
 <style>
-  :root{
-    --coral:#E8614F; --coral-dark:#c44338; --coral-light:#fdf1ef; --coral-mid:#f5c6be;
-    --black:#0f0f0f; --gray-900:#1a1a1a; --gray-700:#3d3d3d; --gray-500:#6b6b6b; --gray-300:#c7c7c7;
-    --gray-100:#f5f5f5; --white:#ffffff;
-    --shadow-sm:0 1px 4px rgba(0,0,0,.07); --shadow:0 2px 12px rgba(0,0,0,.09);
-    --radius:12px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--gray-100);color:var(--black);}
-  .header{background:var(--white);border-bottom:3px solid var(--coral);padding:0 40px;}
-  .header-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:24px 0;flex-wrap:wrap;gap:16px;}
-  .brand-block{display:flex;flex-direction:column;gap:3px;}
-  .brand-agency{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--coral);}
-  .brand-name{font-size:13px;color:var(--gray-500);}
-  .client-block{text-align:right;}
-  .client-name{font-size:22px;font-weight:800;color:var(--black);letter-spacing:-.4px;}
-  .client-sub{font-size:13px;color:var(--gray-500);margin-top:2px;}
-  .container{max-width:1280px;margin:0 auto;padding:28px 24px 40px;}
-  .selector-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-  .selector-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);margin-bottom:10px;display:block;}
-  .month-tabs{display:flex;gap:8px;flex-wrap:wrap;}
-  .month-btn{padding:9px 20px;border-radius:30px;border:1.5px solid var(--gray-300);background:var(--white);color:var(--gray-700);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
-  .month-btn:hover{border-color:var(--coral);}
-  .month-btn.active{background:var(--coral);color:#fff;border-color:var(--coral);}
-  .open-link{font-size:12px;color:var(--coral-dark);text-decoration:none;font-weight:600;white-space:nowrap;}
-  .open-link:hover{text-decoration:underline;}
-  .frame-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;}
-  #reportFrame{width:100%;height:2600px;border:0;display:block;}
-  .footer{background:var(--white);border-top:2px solid var(--coral-mid);padding:18px 40px;margin-top:20px;}
-  .footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-  .footer-left{font-size:12px;color:var(--gray-500);}
-  .footer-left strong{color:var(--coral);}
-  .footer-right{font-size:11px;color:var(--gray-300);}
-  @media (max-width:700px){
-    .header-inner{flex-direction:column;text-align:center;}
-    .client-block{text-align:center;}
-    .selector-card{flex-direction:column;align-items:flex-start;}
-    #reportFrame{height:3400px;}
-  }
+:root{--bg:#02070d;--panel:#071421;--panel2:#0a1b2b;--line:#123b59;--blue:#00d9ff;--blue2:#087cff;--gold:#d6a93d;--gold2:#f6d57c;--text:#f4f8fb;--muted:#8fa9bc;--green:#35e27a;--red:#ff6674}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 70% -10%,#0b2942 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}.side{position:sticky;top:0;height:100vh;padding:24px 16px;border-right:1px solid #0d2a40;background:linear-gradient(180deg,#030a11,#06131f);display:flex;flex-direction:column;z-index:10}
+.connect{font-weight:900;font-size:20px;letter-spacing:1px}.connect b{color:var(--blue)}.micro{font-size:8px;letter-spacing:2.2px;color:#b8cbd8;margin-top:4px}.divider{height:1px;background:linear-gradient(90deg,var(--blue),transparent);margin:22px 0}
+.client{display:flex;align-items:center;gap:10px}.rc{width:42px;height:42px;border:1px solid #7d632d;border-radius:10px;display:grid;place-items:center;font:700 24px Georgia;color:var(--gold2);background:linear-gradient(145deg,#211b0d,#080b0d);box-shadow:0 0 20px #d6a93d18}.client strong{font-size:12px}.client small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+nav{margin-top:28px;display:grid;gap:7px}.nav{border:0;background:transparent;color:#91a9ba;text-align:left;padding:12px;border-radius:10px;font-size:12px;cursor:pointer}.nav:hover,.nav.active{color:#fff;background:linear-gradient(90deg,#087cff22,transparent);box-shadow:inset 3px 0 var(--blue)}.nav span{display:inline-block;width:24px;color:var(--blue)}
+.side-foot{margin-top:auto;color:#547084;font-size:9px;line-height:1.6}.side-foot b{color:var(--blue)}
+.main{min-width:0}.hero{height:170px;position:relative;overflow:hidden;border-bottom:1px solid #12344c;background:linear-gradient(90deg,#03101a 0%,#071722dd 46%,#1d190c99),radial-gradient(circle at 82% 35%,#9f7c2633,transparent 28%)}
+.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#00d9ff08 1px,transparent 1px),linear-gradient(90deg,#00d9ff08 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(90deg,transparent,#000)}
+.hero-in{position:relative;height:100%;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px}.eyebrow{font-size:10px;color:var(--blue);letter-spacing:2px;text-transform:uppercase}.hero h1{margin:7px 0 5px;font-size:28px}.hero h1 em{font:italic 400 28px Georgia;color:var(--gold2)}.hero p{margin:0;color:var(--muted);font-size:12px}.status{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:10px;color:#8da9bb}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.period{min-width:245px;background:#05131fcc;border:1px solid #16608b;border-radius:14px;padding:12px 14px;box-shadow:0 0 28px #008cff14}.period label{display:block;font-size:9px;color:#6e91aa;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}.period select{width:100%;border:0;outline:0;background:transparent;color:#fff;font-weight:700;font-size:13px}.period option{background:#071421}
+.content{padding:24px 28px 50px;max-width:1550px;margin:auto}.welcome{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.welcome h2{margin:0;font-size:18px}.welcome p{margin:5px 0 0;color:var(--muted);font-size:11px}.actions{display:flex;gap:8px}.btn{padding:9px 12px;border-radius:9px;border:1px solid #17405c;background:#071827;color:#bcd1df;font-size:10px;cursor:pointer;text-decoration:none}.btn.primary{border-color:#087cff;color:#fff;background:linear-gradient(135deg,#087cff,#00bfe9)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}.kpi{position:relative;overflow:hidden;background:linear-gradient(145deg,#081725,#05101a);border:1px solid #11344d;border-radius:14px;padding:16px;min-height:105px}.kpi:after{content:"";position:absolute;width:70px;height:70px;border-radius:50%;background:#00cfff0c;right:-20px;top:-20px}.kpi .ico{font-size:15px;color:var(--blue);margin-bottom:10px}.kpi small{display:block;color:#7895a9;font-size:9px;text-transform:uppercase;letter-spacing:.8px}.kpi strong{display:block;font-size:21px;margin-top:5px}.kpi.gold strong{color:var(--gold2)}.kpi .sub{font-size:9px;color:#58778c;margin-top:5px}
+.grid{display:grid;grid-template-columns:1.55fr .85fr;gap:14px}.card{background:linear-gradient(145deg,#071522,#040e17);border:1px solid #11344d;border-radius:15px;overflow:hidden}.card-head{padding:14px 16px;border-bottom:1px solid #102d42;display:flex;justify-content:space-between;align-items:center}.card-head strong{font-size:12px}.card-head small{color:#638399;font-size:9px}.insights{padding:16px;display:grid;gap:11px}.insight{display:flex;gap:10px;align-items:flex-start;padding:11px;background:#091a28;border-radius:10px;border:1px solid #123149}.insight i{font-style:normal;color:var(--green)}.insight b{font-size:10px;display:block}.insight span{font-size:9px;color:#7895a9;line-height:1.5;display:block;margin-top:3px}.metric{padding:17px}.bar{height:7px;background:#10293a;border-radius:10px;margin:8px 0 13px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue2),var(--blue));border-radius:10px}.metric-row{display:flex;justify-content:space-between;font-size:10px;color:#8aa4b6}.metric-row b{color:#e8f5fc}
+.report-wrap{margin-top:14px}.report-top{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;background:#06131f;border:1px solid #12364e;border-bottom:0;border-radius:14px 14px 0 0}.report-top strong{font-size:12px}.report-top span{font-size:9px;color:#6f8da1}.frame{background:#fff;border:1px solid #12364e;border-radius:0 0 14px 14px;overflow:hidden}.frame iframe{width:100%;height:2500px;border:0;display:block}
+.badge{font-size:9px;padding:5px 8px;border-radius:20px;background:#00d9ff10;color:var(--blue);border:1px solid #00d9ff30}
+@media(max-width:1000px){.shell{grid-template-columns:74px 1fr}.side{padding:20px 10px}.connect{font-size:12px}.micro,.client div:not(.rc),.nav{font-size:0}.nav span{font-size:16px;width:auto}.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:650px){.shell{display:block}.side{position:relative;width:100%;height:auto;flex-direction:row;align-items:center;gap:12px}.side nav,.side-foot,.divider,.client{display:none}.hero{height:auto}.hero-in{padding:24px 18px;align-items:flex-start;flex-direction:column}.period{width:100%}.content{padding:18px 12px}.kpis{grid-template-columns:1fr 1fr}.welcome{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.frame iframe{height:3400px}}
 </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="header-inner">
-    <div class="brand-block">
-      <span class="brand-agency">Connect Mídia Digital</span>
-      <span class="brand-name">Estrategista Digital Paula Araujo</span>
-    </div>
-    <div class="client-block">
-      <div class="client-name">RC Vime Móveis &amp; Decorações</div>
-      <div class="client-sub">Relatórios Mensais de Performance Meta Ads</div>
-    </div>
-  </div>
-</header>
-
-<main class="container">
-  <div class="selector-card">
-    <div>
-      <span class="selector-label">Selecione o mês</span>
-      <div class="month-tabs" id="monthTabs"></div>
-    </div>
-    <a class="open-link" id="openDirect" href="#" target="_blank">Abrir relatório em tela cheia ↗</a>
-  </div>
-
-  <div class="frame-card">
-    <iframe id="reportFrame" src=""></iframe>
-  </div>
+<div class="shell">
+<aside class="side">
+  <div><div class="connect">C<b>ONN</b>ECT</div><div class="micro">MÍDIA DIGITAL</div></div>
+  <div class="divider"></div>
+  <div class="client"><div class="rc">RC</div><div><strong>RC CASA E JARDIM</strong><small>Móveis para viver bem</small></div></div>
+  <nav>
+    <button class="nav active"><span>⌂</span> Visão Geral</button>
+    <button class="nav" onclick="goReport()"><span>◈</span> Meta Ads</button>
+    <button class="nav" onclick="goReport()"><span>◎</span> Leads & Performance</button>
+    <button class="nav" onclick="goReport()"><span>▦</span> Campanhas</button>
+    <button class="nav" onclick="goReport()"><span>✦</span> Análise Estratégica</button>
+  </nav>
+  <div class="side-foot">POWERED BY<br><b>CONNECT MÍDIA DIGITAL</b><br>Marketing • Performance • IA</div>
+</aside>
+<div class="main">
+<section class="hero"><div class="hero-in">
+ <div><div class="eyebrow">Central de Performance & Inteligência</div><h1>RC <em>Casa e Jardim</em></h1><p>Dados, performance e decisões estratégicas em um único ambiente.</p><div class="status"><span class="dot"></span> Painel de acompanhamento • Connect Mídia Digital</div></div>
+ <div class="period"><label>Período do relatório</label><select id="monthSelect"></select></div>
+</div></section>
+<main class="content">
+ <div class="welcome"><div><h2>Visão executiva</h2><p id="welcomeText">Resumo dos principais indicadores do período selecionado.</p></div><div class="actions"><a class="btn" id="direct" target="_blank">Abrir relatório completo ↗</a><button class="btn primary" onclick="goReport()">Ver performance ↓</button></div></div>
+ <section class="kpis" id="kpis"></section>
+ <section class="grid">
+  <div class="card"><div class="card-head"><strong>Performance consolidada</strong><span class="badge" id="periodBadge">AGOSTO 2026</span></div><div class="metric" id="metrics"></div></div>
+  <div class="card"><div class="card-head"><strong>Leitura estratégica Connect</strong><small>INSIGHTS DO PERÍODO</small></div><div class="insights" id="insights"></div></div>
+ </section>
+ <section class="report-wrap" id="report"><div class="report-top"><div><strong>Relatório analítico detalhado</strong><br><span>Campanhas, públicos, leads, custos e oportunidades</span></div><span class="badge">META ADS</span></div><div class="frame"><iframe id="reportFrame"></iframe></div></section>
 </main>
-
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-left">Elaborado por <strong>Connect Mídia Digital</strong> — Estrategista Digital Paula Araujo</div>
-    <div class="footer-right">RC Vime Móveis &amp; Decorações · Relatórios via Meta Ads API</div>
-  </div>
-</footer>
-
+</div></div>
 <script>
-// Lista de relatórios disponíveis — adicione um novo item aqui todo mês
-const reports = [
-  { label: "Agosto 2026", file: "RC_Vime_Dashboard_Agosto2026_3.html" },
-  { label: "Julho 2026", file: "RC_Vime_Dashboard_Julho2026.html" },
-  { label: "Junho 2026", file: "RC_Vime_Dashboard_Junho2026.html" },
+const reports=[
+ {label:"Agosto 2026",file:"RC_Vime_Dashboard_Agosto2026_3.html",kpis:[["Investimento","R$ 19.775,50","◉"],["Alcance","593.194","◎"],["Impressões","1.554.587","◫"],["Cliques","19.366","↗"],["Vendas informadas","R$ 675 mil","◆"]],bars:[["Alcance vs. impressões",38],["Eficiência de cliques",72],["Oportunidades de contato",88]],ins:["1.052 oportunidades de contato geradas no período.","Campanha de Alto Padrão atingiu custo por lead de R$ 6,94.","120 leads qualificados e pipeline potencial autodeclarado de R$ 551 mil."],badge:"AGOSTO 2026"},
+ {label:"Julho 2026",file:"RC_Vime_Dashboard_Julho2026.html",kpis:[["Investimento","R$ 19.259","◉"],["Alcance","605 mil","◎"],["Impressões","1,56 mi","◫"],["Conversas","1.151","↗"],["Leads","272","◆"]],bars:[["Alcance vs. impressões",39],["Conversas iniciadas",76],["Leads captados",61]],ins:["17 campanhas movimentaram a operação no mês.","1.151 conversas iniciadas a partir das campanhas.","272 leads captados para continuidade comercial."],badge:"JULHO 2026"},
+ {label:"Junho 2026",file:"RC_Vime_Dashboard_Junho2026.html",kpis:[["Investimento","R$ 15.227","◉"],["Alcance","450 mil","◎"],["Impressões","991 mil","◫"],["Conversas","1.983","↗"],["Leads","79","◆"]],bars:[["Alcance vs. impressões",45],["Conversas iniciadas",91],["Leads captados",42]],ins:["12 campanhas registradas no período.","1.983 conversas iniciadas — forte volume de interação.","Base de junho serve como referência para evolução dos meses seguintes."],badge:"JUNHO 2026"}
 ];
-
-const tabsEl = document.getElementById('monthTabs');
-const frameEl = document.getElementById('reportFrame');
-const openEl = document.getElementById('openDirect');
-
-function selectReport(index) {
-  const r = reports[index];
-  frameEl.src = r.file;
-  openEl.href = r.file;
-  document.querySelectorAll('.month-btn').forEach((b, i) => b.classList.toggle('active', i === index));
-  history.replaceState(null, '', '#' + encodeURIComponent(r.label.replace(' ', '-')));
+const sel=document.getElementById('monthSelect'),frame=document.getElementById('reportFrame'),direct=document.getElementById('direct');
+reports.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.label;sel.appendChild(o)});
+function render(i){const r=reports[i];frame.src=r.file;direct.href=r.file;document.getElementById('periodBadge').textContent=r.badge;
+ document.getElementById('kpis').innerHTML=r.kpis.map((x,n)=>'<div class="kpi '+(n===4?'gold':'')+'"><div class="ico">'+x[2]+'</div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><div class="sub">Indicador consolidado do período</div></div>').join('');
+ document.getElementById('metrics').innerHTML=r.bars.map(x=>'<div class="metric-row"><span>'+x[0]+'</span><b>'+x[1]+'%</b></div><div class="bar"><i style="width:'+x[1]+'%"></i></div>').join('');
+ document.getElementById('insights').innerHTML=r.ins.map(x=>'<div class="insight"><i>✓</i><div><b>Oportunidade identificada</b><span>'+x+'</span></div></div>').join('');
+ history.replaceState(null,'','#'+r.label.replace(' ','-'));
 }
-
-reports.forEach((r, i) => {
-  const btn = document.createElement('button');
-  btn.className = 'month-btn';
-  btn.textContent = r.label;
-  btn.onclick = () => selectReport(i);
-  tabsEl.appendChild(btn);
-});
-
-// Abre no mês indicado pela URL (#Julho-2026) ou no mais recente por padrão
-let startIndex = 0;
-const hash = decodeURIComponent(location.hash.replace('#','')).replace('-', ' ');
-const found = reports.findIndex(r => r.label === hash);
-if (found >= 0) startIndex = found;
-selectReport(startIndex);
+sel.onchange=()=>render(+sel.value);function goReport(){document.getElementById('report').scrollIntoView({behavior:'smooth'})}
+let idx=0,hash=decodeURIComponent(location.hash.slice(1)).replace('-',' ');let found=reports.findIndex(r=>r.label===hash);if(found>=0)idx=found;sel.value=idx;render(idx);
 </script>
-
-</body>
-</html>
+</body></html>
