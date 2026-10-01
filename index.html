@@ -3,46 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RC Vime Móveis & Decorações — Relatórios de Performance | Connect Mídia Digital</title>
+<title>RC Casa e Jardim — Relatórios de Performance | Connect Mídia Digital</title>
 <style>
   :root{
-    --coral:#E8614F; --coral-dark:#c44338; --coral-light:#fdf1ef; --coral-mid:#f5c6be;
-    --black:#0f0f0f; --gray-900:#1a1a1a; --gray-700:#3d3d3d; --gray-500:#6b6b6b; --gray-300:#c7c7c7;
-    --gray-100:#f5f5f5; --white:#ffffff;
-    --shadow-sm:0 1px 4px rgba(0,0,0,.07); --shadow:0 2px 12px rgba(0,0,0,.09);
-    --radius:12px;
+    --blue:#1d6fd6; --blue-dark:#0f4ea3; --blue-light:#eaf2fd;
+    --gold:#b8902a; --gold-light:#faf1dd;
+    --ink:#10151c; --text-dim:#5b6b7f; --text-faint:#93a1b3;
+    --gray-100:#f4f8fd; --white:#ffffff; --line:#e3e9f1;
+    --shadow-sm:0 1px 4px rgba(16,21,28,.06); --shadow:0 4px 18px rgba(16,21,28,.09);
+    --radius:14px;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--gray-100);color:var(--black);}
-  .header{background:var(--white);border-bottom:3px solid var(--coral);padding:0 40px;}
-  .header-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:24px 0;flex-wrap:wrap;gap:16px;}
-  .brand-block{display:flex;flex-direction:column;gap:3px;}
-  .brand-agency{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--coral);}
-  .brand-name{font-size:13px;color:var(--gray-500);}
-  .client-block{text-align:right;}
-  .client-name{font-size:22px;font-weight:800;color:var(--black);letter-spacing:-.4px;}
-  .client-sub{font-size:13px;color:var(--gray-500);margin-top:2px;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--white);color:var(--ink);}
+  .header{background:var(--white);border-bottom:1px solid var(--line);padding:18px 40px;}
+  .header-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:center;align-items:center;gap:12px;}
+  .brand-text{display:flex;flex-direction:column;gap:1px;text-align:center;}
+  .brand-agency{font-size:14px;font-weight:700;letter-spacing:.4px;color:var(--ink);}
+  .brand-agency span{color:var(--blue);}
+  .brand-name{font-size:10px;color:var(--text-dim);}
+  .client-title-block{background:linear-gradient(180deg,var(--gray-100) 0%,var(--white) 100%);border-bottom:1px solid var(--line);padding:30px 24px 26px;text-align:center;}
+  .client-name{font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-.3px;}
+  .client-sub{font-size:13px;color:var(--text-dim);margin-top:6px;}
   .container{max-width:1280px;margin:0 auto;padding:28px 24px 40px;}
-  .selector-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-  .selector-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);margin-bottom:10px;display:block;}
+  .selector-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .selector-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;display:block;}
   .month-tabs{display:flex;gap:8px;flex-wrap:wrap;}
-  .month-btn{padding:9px 20px;border-radius:30px;border:1.5px solid var(--gray-300);background:var(--white);color:var(--gray-700);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
-  .month-btn:hover{border-color:var(--coral);}
-  .month-btn.active{background:var(--coral);color:#fff;border-color:var(--coral);}
-  .open-link{font-size:12px;color:var(--coral-dark);text-decoration:none;font-weight:600;white-space:nowrap;}
+  .month-btn{padding:9px 20px;border-radius:30px;border:1.5px solid var(--line);background:var(--white);color:var(--text-dim);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+  .month-btn:hover{border-color:var(--blue);}
+  .month-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .open-link{font-size:12px;color:var(--blue-dark);text-decoration:none;font-weight:600;white-space:nowrap;}
   .open-link:hover{text-decoration:underline;}
-  .frame-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;}
-  #reportFrame{width:100%;height:2600px;border:0;display:block;}
-  .footer{background:var(--white);border-top:2px solid var(--coral-mid);padding:18px 40px;margin-top:20px;}
+  .frame-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;}
+  #reportFrame{width:100%;height:2900px;border:0;display:block;background:#0a0f1a;}
+  .footer{b�alcground:var(--white);border-top:1px solid var(--line);padding:18px 40px;margin-top:20px;}
   .footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-  .footer-left{font-size:12px;color:var(--gray-500);}
-  .footer-left strong{color:var(--coral);}
-  .footer-right{font-size:11px;color:var(--gray-300);}
+  .footer-left{font-size:12px;color:var(--text-dim);}
+  .footer-left strong{color:var(--blue-dark);}
+  .footer-right{font-size:11px;color:var(--text-faint);}
   @media (max-width:700px){
-    .header-inner{flex-direction:column;text-align:center;}
-    .client-block{text-align:center;}
     .selector-card{flex-direction:column;align-items:flex-start;}
-    #reportFrame{height:3400px;}
+    #reportFrame{height:3600px;}
   }
 </style>
 </head>
@@ -50,16 +50,17 @@
 
 <header class="header">
   <div class="header-inner">
-    <div class="brand-block">
-      <span class="brand-agency">Connect Mídia Digital</span>
+    <div class="brand-text">
+      <span class="brand-agency">CON<span>N</span>ECT MÍDIA DIGITAL</span>
       <span class="brand-name">Estrategista Digital Paula Araujo</span>
-    </div>
-    <div class="client-block">
-      <div class="client-name">RC Vime Móveis &amp; Decorações</div>
-      <div class="client-sub">Relatórios Mensais de Performance Meta Ads</div>
     </div>
   </div>
 </header>
+
+<div class="client-title-block">
+  <div class="client-name">RC Casa e Jardim</div>
+  <div class="client-sub">Relatórios Mensais de Performance Meta Ads</div>
+</div>
 
 <main class="container">
   <div class="selector-card">
@@ -67,7 +68,7 @@
       <span class="selector-label">Selecione o mês</span>
       <div class="month-tabs" id="monthTabs"></div>
     </div>
-    <a class="open-link" id="openDirect" href="#" target="_blank">Abrir relatório em tela cheia ↗</a>
+    <a class="open-link" id="openDirect" href="#" target="_blank">Abrir relatório em tela cheia ↔</a>
   </div>
 
   <div class="frame-card">
@@ -78,14 +79,15 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-left">Elaborado por <strong>Connect Mídia Digital</strong> — Estrategista Digital Paula Araujo</div>
-    <div class="footer-right">RC Vime Móveis &amp; Decorações · Relatórios via Meta Ads API</div>
+    <div class="footer-right">RC Casa e Jardim · Relatórios via Meta Ads API</div>
   </div>
 </footer>
 
 <script>
 // Lista de relatórios disponíveis — adicione um novo item aqui todo mês
 const reports = [
-  { label: "Agosto 2026", file: "RC_Vime_Dashboard_Agosto2026_3.html" },
+  { label: "Setembro 2026", file: "RC_Vime_Dashboard_Setembro2026.html" },
+  { label: "Agosto 2026", file: "RC_Vime_Dashboard_Agosto2026.html" },
   { label: "Julho 2026", file: "RC_Vime_Dashboard_Julho2026.html" },
   { label: "Junho 2026", file: "RC_Vime_Dashboard_Junho2026.html" },
 ];
