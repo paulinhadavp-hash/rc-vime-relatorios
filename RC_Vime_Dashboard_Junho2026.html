@@ -135,10 +135,42 @@ tbody tr:nth-child(even):hover td { background: var(--panel-2); }
 .date-pill { box-shadow: var(--shadow); }
 .kpi-icon { box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
 .footer-note { border-top:1px solid var(--line); margin-top:6px; }
+
+/* --- responsivo mobile --- */
+html, body { max-width:100%; overflow-x:hidden; }
+.mobile-nav { display:none; }
+@media (max-width:860px) {
+  .app { flex-direction:column; }
+  .main { padding:16px 14px 40px; }
+  .mobile-nav { display:flex; gap:8px; overflow-x:auto; padding:12px 14px; background:var(--panel); border-bottom:1px solid var(--line); -webkit-overflow-scrolling:touch; }
+  .mobile-nav a { flex-shrink:0; padding:8px 14px; border-radius:20px; background:var(--panel-2); color:var(--text-dim); font-size:12.5px; font-weight:700; white-space:nowrap; border:1px solid var(--line); }
+  .mobile-nav a.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .topbar { gap:10px; }
+  .topbar-client-name { font-size:16px; }
+  .date-pill { font-size:11px; padding:7px 12px; }
+  .kpi-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .kpi-card { padding:13px 12px; }
+  .kpi-value { font-size:16px; word-break:break-word; }
+  .kpi-label { font-size:10px; }
+  .stat-row { flex-direction:column; gap:10px; }
+  .stat-box { min-width:0; }
+  .row-main2 { grid-template-columns:1fr; }
+  .projection-grid { grid-template-columns:1fr; }
+  .card, .projection-section { padding:16px 14px; }
+  table { font-size:11.5px; }
+  .camp-name { max-width:160px; }
+}
+@media (max-width:420px) {
+  .kpi-grid { grid-template-columns:1fr 1fr; }
+  .kpi-value { font-size:15px; }
+  .topbar-client img { width:38px; height:38px; }
+  .topbar-client-name { font-size:15px; }
+}
 </style>
 </head>
 <body>
 <div class="app">
+  <nav class="mobile-nav"><a href="RC_Vime_Dashboard_Junho2026.html" class="active">Junho 2026</a><a href="RC_Vime_Dashboard_Julho2026.html" class="">Julho 2026</a><a href="RC_Vime_Dashboard_Agosto2026.html" class="">Agosto 2026</a><a href="RC_Vime_Dashboard_Setembro2026.html" class="">Setembro 2026</a></nav>
 
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -463,6 +495,24 @@ new Chart(document.getElementById('resultChart'), {
 });
 
 buildObjChart();
+</script>
+
+<script>
+(function(){
+  function sendHeight(){
+    try {
+      var h = document.body.scrollHeight;
+      window.parent.postMessage({ type: 'rc-dashboard-height', height: h }, '*');
+    } catch(e){}
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  setTimeout(sendHeight, 400);
+  setTimeout(sendHeight, 1200);
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+})();
 </script>
 </body>
 </html>
