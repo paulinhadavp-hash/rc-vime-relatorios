@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RC Casa e Jardim — Relatórios de Performance | Connect Mídia Digital</title>
+<style>
+  :root{
+    --blue:#1d6fd6; --blue-dark:#0f4ea3; --blue-light:#eaf2fd;
+    --gold:#b8902a; --gold-light:#faf1dd;
+    --ink:#10151c; --text-dim:#5b6b7f; --text-faint:#93a1b3;
+    --gray-100:#f4f8fd; --white:#ffffff; --line:#e3e9f1;
+    --shadow-sm:0 1px 4px rgba(16,21,28,.06); --shadow:0 4px 18px rgba(16,21,28,.09);
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{max-width:100%;overflow-x:hidden;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--white);color:var(--ink);}
+  .header{background:var(--white);border-bottom:1px solid var(--line);padding:18px 20px;}
+  .header-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:center;align-items:center;gap:12px;}
+  .brand-text{display:flex;flex-direction:column;gap:1px;text-align:center;}
+  .brand-agency{font-size:14px;font-weight:700;letter-spacing:.4px;color:var(--ink);}
+  .brand-agency span{color:var(--blue);}
+  .brand-name{font-size:10px;color:var(--text-dim);}
+  .client-title-block{background:linear-gradient(180deg,var(--gray-100) 0%,var(--white) 100%);border-bottom:1px solid var(--line);padding:30px 20px 26px;text-align:center;}
+  .client-name{font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-.3px;}
+  .client-sub{font-size:13px;color:var(--text-dim);margin-top:6px;}
+  .container{max-width:1280px;margin:0 auto;padding:24px 16px 40px;}
+  .selector-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .selector-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;display:block;}
+  .month-tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .month-btn{padding:9px 18px;border-radius:30px;border:1.5px solid var(--line);background:var(--white);color:var(--text-dim);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+  .month-btn:hover{border-color:var(--blue);}
+  .month-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .open-link{font-size:12px;color:var(--blue-dark);text-decoration:none;font-weight:600;white-space:nowrap;}
+  .open-link:hover{text-decoration:underline;}
+  .frame-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;}
+  #reportFrame{width:100%;border:0;display:block;background:#0a0f1a;height:1400px;transition:height .15s ease;}
+  .footer{background:var(--white);border-top:1px solid var(--line);padding:18px 20px;margin-top:20px;}
+  .footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+  .footer-left{font-size:12px;color:var(--text-dim);}
+  .footer-left strong{color:var(--blue-dark);}
+  .footer-right{font-size:11px;color:var(--text-faint);}
+  @media (max-width:700px){
+    .selector-card{flex-direction:column;align-items:flex-start;}
+    .client-name{font-size:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="brand-text">
+      <span class="brand-agency">CON<span>N</span>ECT MÍDIA DIGITAL</span>
+      <span class="brand-name">Estrategista Digital Paula Araujo</span>
+    </div>
+  </div>
+</header>
+
+<div class="client-title-block">
+  <div class="client-name">RC Casa e Jardim</div>
+  <div class="client-sub">Relatórios Mensais de Performance Meta Ads</div>
+</div>
+
+<main class="container">
+  <div class="selector-card">
+    <div>
+      <span class="selector-label">Selecione o mês</span>
+      <div class="month-tabs" id="monthTabs"></div>
+    </div>
+    <a class="open-link" id="openDirect" href="#" target="_blank">Abrir relatório em tela cheia ↗</a>
+  </div>
+
+  <div class="frame-card">
+    <iframe id="reportFrame" src=""></iframe>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">Elaborado por <strong>Connect Mídia Digital</strong> — Estrategista Digital Paula Araujo</div>
+    <div class="footer-right">RC Casa e Jardim · Relatórios via Meta Ads API</div>
+  </div>
+</footer>
+
+<script>
+// Lista de relatórios disponíveis — adicione um novo item aqui todo mês
+const reports = [
+  { label: "Setembro 2026", file: "RC_Vime_Dashboard_Setembro2026.html" },
+  { label: "Agosto 2026", file: "RC_Vime_Dashboard_Agosto2026.html" },
+  { label: "Julho 2026", file: "RC_Vime_Dashboard_Julho2026.html" },
+  { label: "Junho 2026", file: "RC_Vime_Dashboard_Junho2026.html" },
+];
+
+const tabsEl = document.getElementById('monthTabs');
+const frameEl = document.getElementById('reportFrame');
+const openEl = document.getElementById('openDirect');
+
+function selectReport(index) {
+  const r = reports[index];
+  frameEl.src = r.file;
+  openEl.href = r.file;
+  document.querySelectorAll('.month-btn').forEach((b, i) => b.classList.toggle('active', i === index));
+  history.replaceState(null, '', '#' + encodeURIComponent(r.label.replace(' ', '-')));
+}
+
+reports.forEach((r, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'month-btn';
+  btn.textContent = r.label;
+  btn.onclick = () => selectReport(i);
+  tabsEl.appendChild(btn);
+});
+
+// Redimensiona o iframe automaticamente conforme a altura real do conteúdo (funciona em celular e computador)
+window.addEventListener('message', function(ev) {
+  if (ev.data && ev.data.type === 'rc-dashboard-height' && typeof ev.data.height === 'number') {
+    frameEl.style.height = Math.max(ev.data.height + 20, 600) + 'px';
+  }
+});
+
+// Abre no mês indicado pela URL (#Julho-2026) ou no mais recente por padrão
+let startIndex = 0;
+const hash = decodeURIComponent(location.hash.replace('#','')).replace('-', ' ');
+const found = reports.findIndex(r => r.label === hash);
+if (found >= 0) startIndex = found;
+selectReport(startIndex);
+</script>
+
+</body>
+</html>
